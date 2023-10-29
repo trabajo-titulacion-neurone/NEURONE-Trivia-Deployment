@@ -6,9 +6,9 @@
   #la cual se activa precisamente al ejecutar los roles mongodb y mongo_users
   # become_user: root
   # become_method: sudo
-  # roles:
-  #   - mongodb
-  #   - mongodb_users
+  roles:
+    - mongodb
+    #- mongodb_users
 
   
   become: true
@@ -92,57 +92,6 @@
 #       name: docker-ce
 #       state: latest
 #       update_cache: true
-
-#Instalacion de MongoDB (INTENTO 1)
-  # - name: Import the public key used by the package management system
-  #   apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
-  
-  # - name: Add MongoDB repository
-  #   apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' state=present
-  
-  # - name: install mongodb
-  #   apt: pkg=mongodb-org state=latest update_cache=yes
-  #   notify:
-  #   - start mongodb
-  
-  # - name: start mongodb
-  #   service:
-  #     name: mongod
-  #     state: started
-
-
-  # #instalar MongoDB (Intento 2)
-  # - name: Install aptitude using apt
-  #   apt:
-  #     name: aptitude
-  #     state: latest
-  #     update_cache: yes
-
-  # - name: Import public key
-  #   apt_key:
-  #     url: 'https://www.mongodb.org/static/pgp/server-4.2.asc'
-  #     state: present
-
-  # - name: Add repository
-  #   apt_repository:
-  #     filename: '/etc/apt/sources.list.d/mongodb-org-4.2.list'
-  #     repo: 'deb https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse'
-  #     state: present
-  #     update_cache: yes
-
-  # - name: Install mongoDB
-  #   apt:
-  #     name: mongodb-org
-  #     state: present
-  #     update_cache: yes
-
-  # - name: Ensure mongodb is running and and enabled to start automatically on reboots
-  #   service:
-  #     name: mongod
-  #     enabled: yes
-  #     state: started
-
-
 
 
   - name: install and check nginx latest version
