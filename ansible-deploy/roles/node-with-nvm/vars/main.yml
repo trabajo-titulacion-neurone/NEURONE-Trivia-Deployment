@@ -1,0 +1,4 @@
+---
+# vars file for node-with-nvm
+
+node_version: "16.14.1"

@@ -1,13 +1,14 @@
 
 
-- hosts: all
+- hosts: webservers
 
   #Esto viene incluido con la ejecucion de los roles mongodb y mongodb_users
   become_user: root
   become_method: sudo
   roles:
-    - mongodb
-    - mongodb_users
+    - node-with-nvm
+    # - mongodb
+    # - mongodb_users
 
     
   become: true
@@ -33,59 +34,6 @@
     apt:
       name: "*"
       state: latest
-
-
-
-
-
-
-
-
-
-  ########################## Instalacion de Node con NVM #####################################################################################
-
-  - name: Install NVM (Node Version Manager) #Fuente: https://gist.github.com/komuw/b3b5d24977d4df7bd549
-    become: no
-    ansible.builtin.shell: > # Usar el módulo "shell" para ejecutar comandos de shell e instalar nvm desde el script
-      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
-    args:
-      executable: /bin/bash # Indicar que el shell a utilizar es Bash
-      chdir: "$HOME" # Cambiar el directorio de trabajo al directorio de inicio del usuario
-      creates: "$HOME/.nvm/nvm.sh" # Se comprueba si el archivo "nvm.sh" ya existe en el directorio de inicio
-
-  - name: Install Node 
-    #para que esto funcionara hay que ejecutar el siguiente comando en el server para crear un enlace simbolico con la version por defecto de node que se esta usando
-    #sudo ln -sf /root/.nvm/versions/node/v16.14.1/bin/node /usr/bin/node
-    #ln -sf ~/.nvm/versions/node/v{{ item }}/bin/node /usr/bin/node
-    become: yes
-    shell: > # Activar nvm y luego instalar una versión específica de Node.js
-      . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ item }}
-
-    args:
-      executable: /bin/bash
-      chdir: "{{ ansible_env.HOME }}"
-      creates: "{{ ansible_env.HOME }}/.nvm/versions/{{ item }}"
-    
-    loop: # Realizar esta tarea para múltiples versiones de Node.js
-      - 16.14.1 #IDEALMENTE ESTO DEBE SER UNA CONSTANTE GLOBAL
-
-  - name: Activar Node con link simbolico
-    become: yes
-    shell: ln -sf /root/.nvm/versions/node/v16.14.1/bin/node /usr/bin/node
-
-
-  ########################## FIN Instalacion de Node con NVM #####################################################################################
-
-
-
-
-
-
-
-
-
-
-
 
 
 
