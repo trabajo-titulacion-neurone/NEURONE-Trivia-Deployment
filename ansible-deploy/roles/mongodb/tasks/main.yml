@@ -36,7 +36,7 @@
     - curl
     - gnupg
     - python3-pip
-  become: yes
+  become: true #yes cambiado a true por gerardo
 
 - name: Install pymongo
   pip:
@@ -82,18 +82,38 @@
   lineinfile:
     path: /etc/mongod.conf
     regexp: '^ *bindIp:.*'
-    line: '  bindIp: 0.0.0.0'
+    line: '  bindIp: 0.0.0.0' #OJO CON ESTO porque al parecer libera el puerto de mongo para cualquiera
     state: present
     backup: yes
   notify:
     - Restart MongoDB Service
 
+# - name: Enable authentication in MongoDB
+#   lineinfile:
+#     path: /etc/mongod.conf
+#     line: "security:\n  authorization: enabled"
+#     insertafter: "^#security:"
+#     state: present
+#     backup: yes
+#   notify: 
+#     - Restart MongoDB Service
+
+
+
+
+#Se cambia la forma en que se realiza la tarea debido a que si se ejecutaba multiples veces
+#se escribia el "security:\n  authorization: enabled" en el archivo de configuración
+#tantas veces como ejecuciones hubieran.
+#Ahora, con esto, se comprueba si el bloque ya se escribió antes de realizar la acción
 - name: Enable authentication in MongoDB
-  lineinfile:
+  blockinfile:
     path: /etc/mongod.conf
-    line: "security:\n  authorization: enabled"
+    block: |
+      security:
+        authorization: enabled
     insertafter: "^#security:"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
     state: present
-    backup: yes
+    #backup: yes #se activa para crear una copia de seguridad del archivo antes de realizar cambios
   notify: 
     - Restart MongoDB Service
