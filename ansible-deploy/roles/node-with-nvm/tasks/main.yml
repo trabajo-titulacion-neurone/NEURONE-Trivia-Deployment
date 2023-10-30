@@ -1,6 +1,6 @@
 ---
 # tasks file for node-with-nvm
-#Instalación de una version especifica de nodejs utilizando Node Package Manager
+#Instalación y activación de una version especifica de nodejs utilizando Node Package Manager
 
   ########################## Instalacion de Node con NVM #####################################################################################
 # - name: Run the equivalent of "apt-get update" as a separate step
@@ -42,7 +42,7 @@
 - name: Activar Node con link simbolico
   become: true
   shell: >
-    ln -sf /root/.nvm/versions/node/v{{ node_version }}/bin/node /usr/bin/node
+    ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/node /usr/bin/node
     
 
 - name: Install PM2 packages
