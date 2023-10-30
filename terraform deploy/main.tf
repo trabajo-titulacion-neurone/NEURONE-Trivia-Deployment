@@ -9,7 +9,7 @@ terraform {
 
 
 provider "digitalocean" {
-  token = "dop_v1_84bde58ebdf8c2479386e5e7456a98f958d51947ac61128a2a6a38ced7b60ad3"
+  token = "dop_v1_76d94347f12d7aaad9265faed1df732ecb5228c842bd86f17871541a588d43fa"
 }
 
 resource "digitalocean_droplet" "mi_droplet" {
