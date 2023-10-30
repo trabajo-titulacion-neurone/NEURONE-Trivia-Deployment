@@ -41,8 +41,8 @@
 
     #Estas lineas deben agregarse en caso de querer actualizar los datos de un usuario root o agregar uno nuevo
     #Hay que loguearse con los datos de un usuario root existente
-    #login_user: gerardo
-    #login_password: gerardo321
+    login_user: gerardo
+    login_password: gerardo321
     #login_port: 27017
 
     database: admin

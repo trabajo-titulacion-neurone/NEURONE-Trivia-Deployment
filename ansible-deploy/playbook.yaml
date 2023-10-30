@@ -1,18 +1,15 @@
 
 
 - hosts: all
-  #Se escribe esto para instalar por primera vez mongodb
-  #Por alguna razon no funciona la segunda vez debido a que necesito autenticacion
-  #la cual se activa precisamente al ejecutar los roles mongodb y mongo_users
+
+  #Esto viene incluido con la ejecucion de los roles mongodb y mongodb_users
   become_user: root
   become_method: sudo
   roles:
     - mongodb
-    #- mongodb_users
+    - mongodb_users
 
-  
-
-  
+    
   become: true
   serial: 1 #esto fue agregado junto con vars para las tareas que se usan para instalar docker
   vars:
@@ -23,88 +20,160 @@
   tasks:
 
 ############## Instalacion y actualización de paquetes #################################################
-  # - name: Run the equivalent of "apt-get update" as a separate step
-  #   apt:
-  #     update_cache: yes
+  - name: Run the equivalent of "apt-get update" as a separate step
+    apt:
+      update_cache: yes
 
 
-  # - name: Update all packages to the latest version
-  #   apt:
-  #     upgrade: dist
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
 
-  # - name: Upgrade all packages to the latest version
-  #   apt:
-  #     name: "*"
-  #     state: latest
-
-  # - name: Install NVM (Node Version Manager) #Fuente: https://gist.github.com/komuw/b3b5d24977d4df7bd549
-  #   become: no
-  #   ansible.builtin.shell: > # Usar el módulo "shell" para ejecutar comandos de shell e instalar nvm desde el script
-  #     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
-  #   args:
-  #     executable: /bin/bash # Indicar que el shell a utilizar es Bash
-  #     chdir: "$HOME" # Cambiar el directorio de trabajo al directorio de inicio del usuario
-  #     creates: "$HOME/.nvm/nvm.sh" # Se comprueba si el archivo "nvm.sh" ya existe en el directorio de inicio
-
-  # - name: Install Node 
-  #   #para que esto funcionara hay que ejecutar el siguiente comando en el server para crear un enlace simbolico con la version por defecto de node que se esta usando
-  #   #sudo ln -sf /root/.nvm/versions/node/v16.14.1/bin/node /usr/bin/node
-  #   become: yes
-  #   shell: > # Activar nvm y luego instalar una versión específica de Node.js
-  #     . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ item }}
-  #     ln -sf ~/.nvm/versions/node/{{ item }}/bin/node /usr/bin/node
-
-  #   args:
-  #     executable: /bin/bash
-  #     chdir: "{{ ansible_env.HOME }}"
-  #     creates: "{{ ansible_env.HOME }}/.nvm/versions/{{ item }}"
-  #   loop: # Realizar esta tarea para múltiples versiones de Node.js
-  #     - 16.14.1 #IDEALMENTE ESTO DEBE SER UNA CONSTANTE GLOBAL
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
 
 
-  # - name: Install PM2 packages
-  #   #become: yes
-  #   npm:
-  #     executable: ~/.nvm/versions/node/v16.14.1/bin/npm #QUEDA PENDIENTE PASAR EL v16.14.1 como variable o constante global
-  #     name: pm2
-  #     global: yes
-  #     state: present
 
-  # - name: Install http-server (OPCIONAL)
-  #   npm:
-  #     executable: ~/.nvm/versions/node/v16.14.1/bin/npm #QUEDA PENDIENTE PASAR EL v16.14.1 como variable o constante global
-  #     name: http-server
-  #     global: yes
-  #     state: present
+
+
+
+
+
+
+  ########################## Instalacion de Node con NVM #####################################################################################
+
+  - name: Install NVM (Node Version Manager) #Fuente: https://gist.github.com/komuw/b3b5d24977d4df7bd549
+    become: no
+    ansible.builtin.shell: > # Usar el módulo "shell" para ejecutar comandos de shell e instalar nvm desde el script
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
+    args:
+      executable: /bin/bash # Indicar que el shell a utilizar es Bash
+      chdir: "$HOME" # Cambiar el directorio de trabajo al directorio de inicio del usuario
+      creates: "$HOME/.nvm/nvm.sh" # Se comprueba si el archivo "nvm.sh" ya existe en el directorio de inicio
+
+  - name: Install Node 
+    #para que esto funcionara hay que ejecutar el siguiente comando en el server para crear un enlace simbolico con la version por defecto de node que se esta usando
+    #sudo ln -sf /root/.nvm/versions/node/v16.14.1/bin/node /usr/bin/node
+    #ln -sf ~/.nvm/versions/node/v{{ item }}/bin/node /usr/bin/node
+    become: yes
+    shell: > # Activar nvm y luego instalar una versión específica de Node.js
+      . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ item }}
+
+    args:
+      executable: /bin/bash
+      chdir: "{{ ansible_env.HOME }}"
+      creates: "{{ ansible_env.HOME }}/.nvm/versions/{{ item }}"
+    
+    loop: # Realizar esta tarea para múltiples versiones de Node.js
+      - 16.14.1 #IDEALMENTE ESTO DEBE SER UNA CONSTANTE GLOBAL
+
+  - name: Activar Node con link simbolico
+    become: yes
+    shell: ln -sf /root/.nvm/versions/node/v16.14.1/bin/node /usr/bin/node
+
+
+  ########################## FIN Instalacion de Node con NVM #####################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ######################## Instalacion de PM2 ##################################
+  - name: Install PM2 packages
+    #become: yes
+    npm:
+      executable: ~/.nvm/versions/node/v16.14.1/bin/npm #QUEDA PENDIENTE PASAR EL v16.14.1 como variable o constante global
+      name: pm2
+      global: yes
+      state: present
+###############################################################################
+
+
+
+
+
+
+
+
+
+
+
+##################### Instalacion de http-server ###################################################33
+  - name: Install http-server (OPCIONAL)
+    npm:
+      executable: ~/.nvm/versions/node/v16.14.1/bin/npm #QUEDA PENDIENTE PASAR EL v16.14.1 como variable o constante global
+      name: http-server
+      global: yes
+      state: present
   
-
-#Instalacion de Docker (Fuente: https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04)
-  # - name: Add Docker GPG apt Key
-  #   apt_key:
-  #     url: https://download.docker.com/linux/ubuntu/gpg
-  #     state: present
-
-  # - name: Add Docker Repository
-  #   apt_repository:
-  #     repo: deb https://download.docker.com/linux/ubuntu focal stable
-  #     state: present
-
-  # - name: Update apt and install docker-ce
-  #   apt:
-  #     name: docker-ce
-  #     state: latest
-  #     update_cache: true
+#####################################################################################################
 
 
-  # - name: install and check nginx latest version
-  #   apt:
-  #     name: nginx
-  #     state: latest
+
+
+
+
+
+
+
+
+
+
+###################################### Instalacion de Docker (Fuente: https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04)
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+      state: present
+
+  - name: Update apt and install docker-ce
+    apt:
+      name: docker-ce
+      state: latest
+      update_cache: true
+
+###################################### FIN Instalacion de docker #########################################################
+
+
+
+
+
+
+
+
+
+
+
+
+############################# Instalacion y activacion de nginx ###########################################################
+  - name: install and check nginx latest version
+    apt:
+      name: nginx
+      state: latest
   
-  # - name: start nginx
-  #   service:
-  #     name: nginx
-  #     state: started
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+
+#############################################################################################################################
+
+
 
 
 ################################# Instalacion y actualización de paquetes #############################################################
@@ -120,22 +189,31 @@
 
 
 
-  # - name: Clone or update neurone-gm repositoryy
-  #   git:
-  #     repo: 'https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git'
-  #     dest: ~/escritorio/modulo-neurone-gm
-  #     clone: yes
-  #     update: yes
 
-  #   # - name: Clonacion de un repositorio privado desde bash y un token (FUNCIONA. Borrar despues)
-  #   #   shell: git clone https://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@github.com/gerardoluceroc/repo-privado.git /root/escritorio/repo-privado
 
-  # - name: Clone or update trivia GAME repositoryy
-  #   git:
-  #     repo: 'https://github.com/trabajo-titulacion-neurone/neurone-trivia.git'
-  #     dest: ~/escritorio/neurone-trivia
-  #     clone: yes
-  #     update: yes
+
+
+
+
+
+
+
+  - name: Clone or update neurone-gm repositoryy
+    git:
+      repo: 'https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git'
+      dest: ~/escritorio/modulo-neurone-gm
+      clone: yes
+      update: yes
+
+    # - name: Clonacion de un repositorio privado desde bash y un token (FUNCIONA. Borrar despues)
+    #   shell: git clone https://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@github.com/gerardoluceroc/repo-privado.git /root/escritorio/repo-privado
+
+  - name: Clone or update trivia GAME repositoryy
+    git:
+      repo: 'https://github.com/trabajo-titulacion-neurone/neurone-trivia.git'
+      dest: ~/escritorio/neurone-trivia
+      clone: yes
+      update: yes
 
 
 
