@@ -3,18 +3,6 @@
 #Instalación y activación de una version especifica de nodejs utilizando Node Package Manager
 
   ########################## Instalacion de Node con NVM #####################################################################################
-# - name: Run the equivalent of "apt-get update" as a separate step
-#   apt:
-#     update_cache: yes
-
-# - name: Update all packages to the latest version
-#   apt:
-#     upgrade: dist
-
-# - name: Upgrade all packages to the latest version
-#   apt:
-#     name: "*"
-#     state: latest
 
 - name: Install NVM (Node Version Manager) #Fuente: https://gist.github.com/komuw/b3b5d24977d4df7bd549
   become: false
@@ -46,12 +34,15 @@
     
 
 - name: Install PM2 packages
-  become: false
+  become: true
   npm:
     executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
     name: pm2
     global: yes
     state: present
+
+- name: Activar pm2 
+  shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/pm2
 
 - name: Install http-server (OPCIONAL)
   npm:
@@ -59,6 +50,9 @@
     name: http-server
     global: yes
     state: present
+
+# - name: Activar http-server
+#   shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/http-server
 
 
   ########################## FIN Instalacion de Node con NVM #####################################################################################

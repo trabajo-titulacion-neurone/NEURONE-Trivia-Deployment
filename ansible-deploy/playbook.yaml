@@ -6,12 +6,13 @@
   become_user: root
   become_method: sudo
   roles:
-    - update-upgrade-packages
-    - docker-installation
-    - nginx
-    - node-with-nvm
+    # - update-upgrade-packages
+    # - docker-installation
+    # - nginx
+    # - node-with-nvm
     # - mongodb
     # - mongodb_users
+    - neurone-gm
 
     
   become: true
@@ -26,6 +27,13 @@
 
 
 
+  # - name: Se carga la versión de node que se está utilizando para linkearla con nvm
+  #   ansible.builtin.include_vars:
+  #     file: roles/node-with-nvm/vars/main.yml
+  #     name: node_vars
+
+  # - name: Print var node_version
+  #   shell: echo "Hola Mundo la version de node es {{ node_vars }}"
 
 
 
@@ -35,31 +43,34 @@
 
 
 
+  # - name: Clone or update neurone-gm repositoryy
+  #   git:
+  #     repo: 'https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git'
+  #     dest: ~/escritorio/modulo-neurone-gm
+  #     clone: yes
+  #     update: yes
 
-
-
-
-
-
-
-
-
-  - name: Clone or update neurone-gm repositoryy
-    git:
-      repo: 'https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git'
-      dest: ~/escritorio/modulo-neurone-gm
-      clone: yes
-      update: yes
 
     # - name: Clonacion de un repositorio privado desde bash y un token (FUNCIONA. Borrar despues)
     #   shell: git clone https://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@github.com/gerardoluceroc/repo-privado.git /root/escritorio/repo-privado
 
-  - name: Clone or update trivia GAME repositoryy
-    git:
-      repo: 'https://github.com/trabajo-titulacion-neurone/neurone-trivia.git'
-      dest: ~/escritorio/neurone-trivia
-      clone: yes
-      update: yes
+  # - name: Clone or update trivia GAME repositoryy
+  #   git:
+  #     repo: 'https://github.com/trabajo-titulacion-neurone/neurone-trivia.git'
+  #     dest: ~/escritorio/neurone-trivia
+  #     clone: yes
+  #     update: yes
+
+
+
+
+
+
+
+  # - name: Install packages based on package.json.
+  #   community.general.npm:
+  #     path: ~/escritorio/modulo-neurone-gm/Server
+  #     executable: "~/.nvm/versions/node/v{{ node_version }}/bin/npm"
 
 
 
