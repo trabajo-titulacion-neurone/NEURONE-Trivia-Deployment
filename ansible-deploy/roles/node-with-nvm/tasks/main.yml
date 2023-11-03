@@ -44,6 +44,17 @@
 - name: Activar pm2 
   shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/pm2
 
+- name: Install Angular packages
+  become: true
+  npm:
+    executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
+    name: "@angular/cli"
+    global: yes
+    state: present
+
+- name: Activar Angular
+  shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/ng /usr/bin/ng
+
 - name: Install http-server (OPCIONAL)
   npm:
     executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
@@ -52,7 +63,7 @@
     state: present
 
 # - name: Activar http-server
-#   shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/http-server
+#   shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/http-server /usr/bin/http-server
 
 
   ########################## FIN Instalacion de Node con NVM #####################################################################################

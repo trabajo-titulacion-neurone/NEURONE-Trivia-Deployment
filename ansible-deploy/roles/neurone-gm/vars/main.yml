@@ -1,2 +1,9 @@
 ---
 # vars file for neurone-gm
+neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git"
+
+neuronegm_directory: "~/escritorio/modulo-neurone-gm"
+
+neuronegm_server_directory: "~/escritorio/modulo-neurone-gm/Server"
+
+neuronegm_server_pm2_process_name: "neuronegm-server"

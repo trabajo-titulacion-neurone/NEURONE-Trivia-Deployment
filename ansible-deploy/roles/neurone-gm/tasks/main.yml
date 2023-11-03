@@ -2,48 +2,50 @@
 # tasks file for neurone-gm
 
 
-
 - name: Se carga la versión de node que se está utilizando para linkearla con nvm
   ansible.builtin.include_vars:
     file: roles/node-with-nvm/vars/main.yml
     name: node_vars
 
 
-- name: Clone or update neurone-gm repositoryy
+- name: Clone or update neurone-gm repository
   git:
-    repo: 'https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git'
-    dest: ~/escritorio/modulo-neurone-gm
+    repo: "{{ neuronegm_repository }}"
+    dest: "{{ neuronegm_directory }}"
     clone: yes
     update: yes
 
 - name: Install dependencies.
   community.general.npm:
-    path: ~/escritorio/modulo-neurone-gm/Server
+    path: "{{ neuronegm_server_directory }}"
     executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
+#Se restauran los procesos guardados en caso de un reboot del servidor
+- name: pm2 resurrect
+  ansible.builtin.command: pm2 resurrect
 
 - name: Ejecutar el comando "pm2 ls"
   ansible.builtin.command: pm2 ls
-  register: procesos_pm2
-  ignore_errors: true
+  register: pm2_processes
+  #ignore_errors: true
 
 - name: Analizar la salida en busca del proceso "neurone-gm"
   ansible.builtin.set_fact:
-    proceso_en_ejecucion: "{{ 'neurone-gm' in procesos_pm2.stdout }}"
-
-- name: print neurone-gm neurone_gm_proceso_en_ejecucion
-  shell: echo "Hola Mundo el valor de la variable es {{ proceso_en_ejecucion }}"
+    running_process: "{{ neuronegm_server_pm2_process_name in pm2_processes.stdout }}"
 
 
-- name: Ejecutar el comando PM2 (reload) si el proceso está en ejecución
-  ansible.builtin.command: pm2 reload app.js --name neurone-gm
+- name: Ejecutar el comando PM2 (restart) si el proceso está en ejecución
+  ansible.builtin.command: pm2 restart {{ neuronegm_server_pm2_process_name }}
   args:
-    chdir: ~/escritorio/modulo-neurone-gm/Server
-  when: proceso_en_ejecucion
+    chdir: "{{ neuronegm_server_directory }}"
+  when: running_process
 
 - name: Ejecutar el comando PM2 (start) si el proceso no está en ejecución o no está creado
-  ansible.builtin.command: pm2 start app.js --name neurone-gm
+  ansible.builtin.command: pm2 start app.js --name {{ neuronegm_server_pm2_process_name }}
   args:
-    chdir: ~/escritorio/modulo-neurone-gm/Server
-  when: not proceso_en_ejecucion
+    chdir: "{{ neuronegm_server_directory }}"
+  when: not running_process
 
+# Save current process list
+- name: pm2 save
+  ansible.builtin.command: pm2 save

@@ -1,0 +1,11 @@
+---
+# vars file for GAME
+trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git"
+
+trivia_directory: "~/escritorio/neurone-trivia"
+
+trivia_server_directory: "~/escritorio/neurone-trivia/Server"
+
+trivia_client_directory: "~/escritorio/neurone-trivia/Client"
+
+trivia_server_pm2_process_name: "trivia-server"

@@ -1,0 +1,69 @@
+---
+# tasks file for GAME
+
+- name: Se carga la versión de node que se está utilizando para linkearla con nvm
+  ansible.builtin.include_vars:
+    file: roles/node-with-nvm/vars/main.yml
+    name: node_vars
+
+
+- name: Clone or update trivia repository
+  git:
+    repo: "{{ trivia_repository }}"
+    dest: "{{ trivia_directory }}"
+    clone: yes
+    update: yes
+    force: yes #esto se agrega debido a un problema con la modificacion del package-lock.json en el repositorio local
+
+
+
+
+- name: Install trivia-client dependencies.
+  community.general.npm:
+    path: "{{ trivia_client_directory }}"
+    executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+
+- name: Build Frontend
+  become: true
+  ansible.builtin.command: ng build --prod --output-path ../Server/public
+  args:
+    chdir: "{{ trivia_client_directory }}"
+
+
+
+
+- name: Install trivia-server dependencies.
+  community.general.npm:
+    path: "{{ trivia_server_directory }}"
+    executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+
+#Se restauran los procesos guardados en caso de un reboot del servidor
+- name: pm2 resurrect
+  ansible.builtin.command: pm2 resurrect
+
+- name: Ejecutar el comando "pm2 ls"
+  ansible.builtin.command: pm2 ls
+  register: pm2_processes
+
+- name: Analizar la salida en busca del proceso "trivia-server"
+  ansible.builtin.set_fact:
+    running_process: "{{ trivia_server_pm2_process_name in pm2_processes.stdout }}"
+
+
+- name: Ejecutar el comando PM2 (restart) si el proceso está en ejecución
+  ansible.builtin.command: pm2 restart {{ trivia_server_pm2_process_name }}
+  args:
+    chdir: "{{ trivia_server_directory }}"
+  when: running_process
+
+- name: Ejecutar el comando PM2 (start) si el proceso no está en ejecución o no está creado
+  ansible.builtin.command: pm2 start app.js --name {{ trivia_server_pm2_process_name }}
+  args:
+    chdir: "{{ trivia_server_directory }}"
+  when: not running_process
+
+# Save current process list
+- name: pm2 save
+  ansible.builtin.command: pm2 save
+
+
