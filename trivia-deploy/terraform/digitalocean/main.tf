@@ -18,13 +18,17 @@ resource "digitalocean_ssh_key" "local_public_key" {
   public_key = file(var.ssh_public_key_path)
 }
 
-resource "digitalocean_droplet" "mi_droplet" {
+resource "digitalocean_droplet" "my_droplet" {
   image  = var.droplet_image
   name   = var.droplet_name
   region = var.droplet_region
   size   = var.droplet_size
   ssh_keys = [digitalocean_ssh_key.local_public_key.fingerprint]
 
+}
+
+output "droplet_ipv4_address" {
+  value = digitalocean_droplet.my_droplet.ipv4_address
 }
 
 
