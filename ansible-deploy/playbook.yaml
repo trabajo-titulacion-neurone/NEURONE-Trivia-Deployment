@@ -13,7 +13,6 @@
     - mongodb_users
     - GAME
     - neurone-gm
-
   become: true
   serial: 1 # Cantidad de host en simultaneo en que se ejecutará el playbook
   tasks:

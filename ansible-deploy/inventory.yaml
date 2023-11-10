@@ -2,7 +2,7 @@ webservers:
   hosts:
     mi_droplet_digitalocean:
       # ansible_host: 137.184.148.76
-      ansible_host: 198.211.113.193
+      ansible_host: 192.241.138.167
       ansible_user: root
   vars:
     ansible_python_interpreter: /usr/bin/python3
