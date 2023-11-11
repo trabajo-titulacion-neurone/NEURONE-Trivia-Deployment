@@ -24,7 +24,7 @@ variable "digitalocean_token" {
   default     = "<DIGITALOCEAN_API_TOKEN>"
 }
 ```
-Then, locate the fingerprint_ssh_key_digitalocean variable and replace the default value with your Fingerprint or ID of your ssh key stored on digitalocean account.
+Then, locate the fingerprint_ssh_key_digitalocean variable and replace the default value with your Fingerprint or ID of your ssh key stored on your digitalocean account and save the file.
 ```hcl
 variable "fingerprint_ssh_key_digitalocean" {
   description = "Fingerprint of the saved SSH key associated with your DigitalOcean account"
