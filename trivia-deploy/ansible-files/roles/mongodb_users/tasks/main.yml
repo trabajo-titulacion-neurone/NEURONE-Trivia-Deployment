@@ -1,11 +1,11 @@
 ---
 
-- name: Crear usuario root en mongoO
-  ignore_errors: true #esto se agrega ya que al ejecutar por segunda vez esta tarea se requiere autenticarse con el mismo usuario creado anteriormente, lo cual es redundante e innecesario. Por lo que en caso de haber un error, este se ignora.
+- name: Create a root user in MongoDB
+  ignore_errors: true # This is added because when running this task for the second time, authentication with the previously created user is required, which is redundant and unnecessary. Therefore, in case of an error, it is ignored.
   community.mongodb.mongodb_user:
 
-    #Estas lineas deben agregarse en caso de querer actualizar los datos de un usuario root o agregar uno nuevo
-    #Hay que loguearse con los datos de un usuario root existente
+    # These lines should be added if you want to update the data of an existing root user or add a new one
+    # You need to log in with the credentials of an existing root user
     # login_user: gerardo
     # login_password: gerardo321
     # login_port: 27017

@@ -1,9 +1,14 @@
 ---
 # vars file for neurone-gm
+
 neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git"
 
+
+#Path where the neurone-gm repository will be stored on the server.
 neuronegm_directory: "~/escritorio/modulo-neurone-gm"
 
+#Path where the neurone-gm Server folder will be stored on the server.
 neuronegm_server_directory: "~/escritorio/modulo-neurone-gm/Server"
 
+#Name of the pm2 process running neuronegm server will have.
 neuronegm_server_pm2_process_name: "neuronegm-server"

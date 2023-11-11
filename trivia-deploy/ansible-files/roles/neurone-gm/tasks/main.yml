@@ -2,7 +2,7 @@
 # tasks file for neurone-gm
 
 
-- name: Se carga la versión de node que se está utilizando para linkearla con nvm
+- name: Node version being used is loaded to link it with nvm
   ansible.builtin.include_vars:
     file: roles/node-with-nvm/vars/main.yml
     name: node_vars
@@ -20,21 +20,21 @@
     path: "{{ neuronegm_server_directory }}"
     executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
-#Se restauran los procesos guardados en caso de un reboot del servidor
+#Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
   ansible.builtin.command: pm2 resurrect
 
-- name: Ejecutar el comando "pm2 ls"
+- name: Run the command "pm2 ls"
   ansible.builtin.command: pm2 ls
   register: pm2_processes
   #ignore_errors: true
 
-- name: Analizar la salida en busca del proceso "neurone-gm"
+- name: AAnalyse the output looking for the 'neuronegm' process
   ansible.builtin.set_fact:
     running_process: "{{ neuronegm_server_pm2_process_name in pm2_processes.stdout }}"
 
 
-- name: Ejecutar el comando PM2 (restart) si el proceso está en ejecución
+- name: Execute the PM2 command (restart) if the process is running
   ansible.builtin.command: pm2 restart {{ neuronegm_server_pm2_process_name }}
   args:
     chdir: "{{ neuronegm_server_directory }}"

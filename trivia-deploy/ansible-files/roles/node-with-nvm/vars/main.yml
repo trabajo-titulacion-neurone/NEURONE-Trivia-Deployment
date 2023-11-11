@@ -1,6 +1,8 @@
 ---
 # vars file for node-with-nvm
 
+#Node version to be installed and activated.
 node_version: "16.14.1"
 
+#Angular version to be installed globally
 angular_version: "16.2.10"

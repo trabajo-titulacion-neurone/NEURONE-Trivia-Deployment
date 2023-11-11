@@ -1,7 +1,7 @@
 ---
 # tasks file for GAME
 
-- name: Se carga la versión de node que se está utilizando para linkearla con nvm
+- name: Node version being used is loaded for linking with nvm
   ansible.builtin.include_vars:
     file: roles/node-with-nvm/vars/main.yml
     name: node_vars
@@ -13,7 +13,7 @@
     dest: "{{ trivia_directory }}"
     clone: yes
     update: yes
-    force: yes #esto se agrega debido a un problema con la modificacion del package-lock.json en el repositorio local
+    force: yes #This is added due to an issue with modifying the package-lock.json in the local repository.
 
 
 
@@ -31,32 +31,32 @@
 
 
 
-
 - name: Install trivia-server dependencies.
   community.general.npm:
     path: "{{ trivia_server_directory }}"
     executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
-#Se restauran los procesos guardados en caso de un reboot del servidor
+#Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
   ansible.builtin.command: pm2 resurrect
 
-- name: Ejecutar el comando "pm2 ls"
+- name: Run the command "pm2 ls"
   ansible.builtin.command: pm2 ls
   register: pm2_processes
 
-- name: Analizar la salida en busca del proceso "trivia-server"
+- name: Analyse the output looking for the 'trivia-server' process
+  #The boolean response is stored in the variable 'running_process'.
   ansible.builtin.set_fact:
     running_process: "{{ trivia_server_pm2_process_name in pm2_processes.stdout }}"
 
 
-- name: Ejecutar el comando PM2 (restart) si el proceso está en ejecución
+- name: Execute the PM2 command (restart) if the process is running
   ansible.builtin.command: pm2 restart {{ trivia_server_pm2_process_name }}
   args:
     chdir: "{{ trivia_server_directory }}"
   when: running_process
 
-- name: Ejecutar el comando PM2 (start) si el proceso no está en ejecución o no está creado
+- name: Execute the PM2 command (start) if the process is not running or not created.
   ansible.builtin.command: pm2 start app.js --name {{ trivia_server_pm2_process_name }}
   args:
     chdir: "{{ trivia_server_directory }}"
