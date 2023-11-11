@@ -2,3 +2,5 @@
 # vars file for node-with-nvm
 
 node_version: "16.14.1"
+
+angular_version: "16.2.10"

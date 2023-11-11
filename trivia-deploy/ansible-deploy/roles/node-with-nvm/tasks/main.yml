@@ -50,6 +50,7 @@
     executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
     name: "@angular/cli"
     global: yes
+    version: "{{ angular_version }}"
     state: present
 
 - name: Activar Angular
@@ -62,8 +63,8 @@
     global: yes
     state: present
 
-# - name: Activar http-server
-#   shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/http-server /usr/bin/http-server
+- name: Activar http-server
+  shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/http-server /usr/bin/http-server
 
 
   ########################## FIN Instalacion de Node con NVM #####################################################################################

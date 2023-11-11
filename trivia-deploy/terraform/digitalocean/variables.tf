@@ -38,5 +38,5 @@ variable "droplet_region" {
 variable "droplet_size" {
   description = "Region of the droplet to be created."
   type    = string
-  default = "s-1vcpu-1gb"
+  default = "s-1vcpu-2gb"
 }
