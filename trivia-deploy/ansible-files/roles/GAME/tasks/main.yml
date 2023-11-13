@@ -23,11 +23,11 @@
     path: "{{ trivia_client_directory }}"
     executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
-- name: Build Frontend
-  become: true
-  ansible.builtin.command: ng build --prod --output-path ../Server/public
-  args:
-    chdir: "{{ trivia_client_directory }}"
+# - name: Build Frontend
+#   become: true
+#   ansible.builtin.command: ng build --prod --output-path ../Server/public
+#   args:
+#     chdir: "{{ trivia_client_directory }}"
 
 
 
