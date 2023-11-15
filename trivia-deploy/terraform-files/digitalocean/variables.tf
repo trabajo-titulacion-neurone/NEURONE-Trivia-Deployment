@@ -1,7 +1,7 @@
 variable "token_digitalocean" {
   description = "Token to connect to your DigitalOcean account"
   type    = string
-  default = "dop_v1_4c1000d363acaa33408f829e76ef464c70807972aae085ef8c2bf8f7cd0453dc"
+  default = ""
 }
 
 variable "fingerprint_ssh_key_digitalocean" {
@@ -44,5 +44,5 @@ variable "droplet_region" {
 variable "droplet_size" {
   description = "Region of the droplet to be created."
   type    = string
-  default = "s-1vcpu-2gb"
+  default = "s-1vcpu-1gb"
 }
