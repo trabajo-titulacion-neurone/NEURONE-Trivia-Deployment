@@ -7,12 +7,21 @@
     file: roles/node-with-nvm/vars/main.yml
     name: node_vars
 
+- name: Clone or update neurone-gm repository
+  debug:
+    var: neuronegm_directory
+
+- name: Debug user environment
+  debug:
+    msg: "HOME: {{ ansible_env.HOME }}, USER: {{ ansible_env.USER }}"
+
 
 - name: Clone or update neurone-gm repository
   git:
     repo: "{{ neuronegm_repository }}"
     dest: "{{ neuronegm_directory }}"
     clone: yes
+    force: yes
     update: yes
 
 - name: Install dependencies.
@@ -29,7 +38,7 @@
   register: pm2_processes
   #ignore_errors: true
 
-- name: AAnalyse the output looking for the 'neuronegm' process
+- name: Analyse the output looking for the 'neuronegm' process
   ansible.builtin.set_fact:
     running_process: "{{ neuronegm_server_pm2_process_name in pm2_processes.stdout }}"
 

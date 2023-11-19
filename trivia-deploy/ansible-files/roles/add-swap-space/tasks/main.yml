@@ -4,6 +4,7 @@
 #Source: https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04#step-1-checking-the-system-for-swap-information
 - name: Checking the System for Swap Information
   become: true
+  become_user: root
   ansible.builtin.command: swapon --show
   register: swap_space_result
 
@@ -13,22 +14,26 @@
 
 - name: Create a Swap Space (2GB)
   become: true
+  become_user: root
   ansible.builtin.command: fallocate -l 2G /swapfile
   when: not swap_space_exists
 
 #Make the file only accessible to root
 - name: Make the Swap file only accessible to root
   become: true
+  become_user: root
   ansible.builtin.command: chmod 600 /swapfile
   when: not swap_space_exists
 
 - name: Mark the file as swap space
   become: true
+  become_user: root
   ansible.builtin.command: mkswap /swapfile
   when: not swap_space_exists
   
 - name: Enabling the swap file
   become: true
+  become_user: root
   ansible.builtin.command: swapon /swapfile
   when: not swap_space_exists
 
@@ -36,11 +41,13 @@
 #Making the Swap File Permanent
 - name: Back up the /etc/fstab file in case anything goes wrong
   become: true
+  become_user: root
   ansible.builtin.command: cp /etc/fstab /etc/fstab.bak
   when: not swap_space_exists
 
 - name: Add the swap file information to the end of the /etc/fstab file
   become: true
+  become_user: root
   ansible.builtin.command: echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
   when: not swap_space_exists
 
@@ -52,4 +59,5 @@
 #WARNING: This setting will persist until the next reboot. 
 - name: Adjusting the Swappiness Property
   become: true
+  become_user: root
   ansible.builtin.command: sysctl vm.swappiness=10
