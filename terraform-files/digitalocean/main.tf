@@ -29,6 +29,7 @@ resource "digitalocean_droplet" "my_droplet" {
 }
 
 
+
 output "droplet_ipv4_address" {
   value = digitalocean_droplet.my_droplet.ipv4_address
 }

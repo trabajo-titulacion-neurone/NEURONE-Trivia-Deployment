@@ -1,5 +1,6 @@
 ---
 - name: Restart MongoDB Service
-  service:
-    name: mongod
+  ignore_errors: true
+  ansible.builtin.systemd_service:
     state: restarted
+    name: mongod 

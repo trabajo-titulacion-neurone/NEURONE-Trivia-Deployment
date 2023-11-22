@@ -1,14 +1,18 @@
 - hosts: webservers
+  serial: 1 # Number of hosts simultaneously executing the playbook
 
   # Roles to execute
 
   roles:
 
-    #A swap space (2GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 2G}
-
     # Package update and upgrade
     - {role: update-upgrade-packages}
+
+    # Server reboot
+    - {role: reboot-and-wait}
+
+    # A swap space (2GB) is created if it does not exist
+    - {role: add-swap-space, swap_space: 2G}
 
     #Docker Installation
     - {role: docker-installation}
@@ -30,6 +34,9 @@
         mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
       }
 
+    # Firewall
+    - {role: firewall-with-ufw}
+
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git", 
@@ -47,11 +54,6 @@
         trivia_server_pm2_process_name: "Trivia-Server"
       }
 
-    # Firewall
-    - {role: firewall-with-ufw}
-    
-
-  serial: 1 # Number of hosts simultaneously executing the playbook
   tasks:
 
     
