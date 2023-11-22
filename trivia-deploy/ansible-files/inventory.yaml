@@ -1,12 +1,10 @@
 webservers:
   hosts:
-    mi_droplet_digitalocean:
-      # ansible_host: 64.227.17.30
-      ansible_host: 68.183.28.2
-      ansible_user: "{{ server_username }}"
-      ansible_become_password: "{{ sudo_password }}"
+    neurone-trivia-dev:
+      ansible_host: 159.89.49.101
+      ansible_user: gerardoluceroc
 
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    ansible_user: "{{ server_username }}"
+    ansible_user: gerardoluceroc
 

@@ -3,11 +3,13 @@
 
 ############################# Instalacion y activacion de nginx ###########################################################
   - name: install and check nginx latest version
+    become: true
     apt:
       name: nginx
       state: latest
   
   - name: start nginx
+    become: true
     service:
       name: nginx
       state: started

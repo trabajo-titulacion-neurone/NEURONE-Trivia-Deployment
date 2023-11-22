@@ -21,7 +21,7 @@
 - name: Install trivia-client dependencies.
   community.general.npm:
     path: "{{ trivia_client_directory }}"
-    executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
 # - name: Build Frontend
 #   become: true
@@ -34,7 +34,7 @@
 - name: Install trivia-server dependencies.
   community.general.npm:
     path: "{{ trivia_server_directory }}"
-    executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
 #Saved processes are restored in case of a server reboot
 - name: pm2 resurrect

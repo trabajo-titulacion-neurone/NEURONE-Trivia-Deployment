@@ -1,11 +1,9 @@
 ---
 admin_database: "admin"
 
-mongodb_root_user: "gerardo"
-mongodb_root_password: "gerardo321"
+mongodb_root_user: "root"
+mongodb_root_password: "root123"
 
 mongodb_admin_user: "neuroneAdmin"
 mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
 
-# mongodb_backup_user: "backupuser"
-# mongodb_backup_password: "backupuser123"

@@ -5,13 +5,13 @@
 trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git"
 
 #Path where the Trivia repository will be stored on the server.
-trivia_directory: "~/escritorio/neurone-trivia"
+trivia_directory: "~/apps/GAME"
 
 #Path where the Trivia Server folder will be stored on the server.
-trivia_server_directory: "~/escritorio/neurone-trivia/Server"
+trivia_server_directory: "~/apps/GAME/Server"
 
 #Path where the Trivia Client folder will be stored on the server.
-trivia_client_directory: "~/escritorio/neurone-trivia/Client"
+trivia_client_directory: "~/apps/GAME/Client"
 
 #Name of the pm2 process running Trivia server will have.
-trivia_server_pm2_process_name: "trivia-server"
+trivia_server_pm2_process_name: "Trivia-Server"

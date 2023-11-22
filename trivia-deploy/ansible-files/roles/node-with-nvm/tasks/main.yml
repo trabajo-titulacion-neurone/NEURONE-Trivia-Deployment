@@ -6,19 +6,19 @@
   ########################## Node installation with NVM #####################################################################################
 
 - name: Install NVM (Node Version Manager) #Source: https://gist.github.com/komuw/b3b5d24977d4df7bd549
-  become: true
-  ansible.builtin.shell: > # Using the 'shell' module to run shell commands and install NVM from the script.
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
+
+  # Using the 'shell' module to run shell commands and install NVM from the script.
+  ansible.builtin.shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
   args:
-    executable: /bin/bash # Indicates that the shell to be used is Bash
-    chdir: "$HOME" # Change the working directory to the user's home directory
-    creates: "$HOME/.nvm/nvm.sh" # Check if the 'nvm.sh' file already exists in the home directory.
+    # executable: /bin/bash # Indicates that the shell to be used is Bash
+    chdir: "{{ ansible_env.HOME }}" # Change the working directory to the user's home directory
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh" # Check if the 'nvm.sh' file already exists in the home directory.
+
 
 - name: Install Node 
   become: true
   shell: > # Activate NVM, then install a specific version of Node.js, and set it as the default
     . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ item }} && nvm alias default {{ node_version }}
-
   args:
     executable: /bin/bash
     chdir: "{{ ansible_env.HOME }}"
@@ -27,46 +27,39 @@
   loop: # Perform this task for multiple versions of Node.js
     - "{{ node_version }}" 
 
-- name: Debug user environment
-  debug:
-    msg: "HOME: {{ ansible_env.HOME }}, USER: {{ ansible_env.USER }}"
 
 #To make this work, you need to run the following command on the server to create a symbolic link with the default version of Node being used
 - name: Activate Node with a symbolic link
   become: true
-  become_user: root
   shell: >
-    ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/node /usr/bin/node
+    ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/node /usr/bin/node
     
 
 - name: Install PM2 packages
   become: true
   npm:
-    executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/npm"
     name: pm2
     global: yes
     state: present
 
 
-- name: Activate pm2 
-  become_user: root
-  shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/pm2
+- name: Activate pm2 with a symbolic link
+  become: true
+  shell: ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/pm2
 
-# - name: Install Angular packagess
-#   become: true
-#   community.general.npm:
-#     executable: ~/.nvm/versions/node/v{{ node_version }}/bin/npm
-#     name: "@angular/cli"
-#     global: yes
-#     version: "{{ angular_version }}"
-#     state: present
+- name: Install Angular packagess
+  become: true
+  community.general.npm:
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/npm"
+    name: "@angular/cli"
+    global: yes
+    version: "{{ angular_version }}"
+    state: present
 
-- name: Install Angular packages
-  ansible.builtin.shell: ~/.nvm/versions/node/v{{ node_version }}/bin/npm install -g @angular/cli@{{ angular_version }} --unsafe-perm=true --allow-root
-
-- name: Activate Angular
-  become_user: root
-  shell: ln -sf ~/.nvm/versions/node/v{{ node_version }}/bin/ng /usr/bin/ng
+- name: Activate Angular with a symbolic link
+  become: true
+  shell: ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/ng /usr/bin/ng
 
 
 

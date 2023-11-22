@@ -1,45 +1,37 @@
 - hosts: webservers
 
-  # This is included in the execution of the mongodb and mongodb_users roles
-
-  # become_user: root
-  become_user: "{{ server_username }}"
-  # become: true
-  # become_method: sudo
-
   # Roles to execute
 
   roles:
-    #Se crea una partición de intercambio en caso de no existir
+    #A swap space is created if it does not exist
     - add-swap-space
 
-    # # Package update and upgrade
-    # - update-upgrade-packages
+    # Package update and upgrade
+    - update-upgrade-packages
 
-    # #Docker Installation
-    # - docker-installation
+    #Docker Installation
+    - docker-installation
 
-    # # Basic installation of Nginx
-    # - nginx
+    # Basic installation of Nginx
+    - nginx
 
     # Installation of NodeJS and global packages using Node Version Manager (NVM)
     - node-with-nvm
 
-    # # Installation of MongoDB and configuration of users
-    # - mongodb
-    # - mongodb_users
+    # Installation of MongoDB and configuration of users
+    - mongodb
+    - mongodb_users
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - neurone-gm
       
 
-    # # Installation of Trivia Server using pm2 and Trivia Client using Angular
-    # - GAME
+    # Installation of Trivia Server using pm2 and Trivia Client using Angular
+    - GAME
     
 
   serial: 1 # Number of hosts simultaneously executing the playbook
   tasks:
-
     
 
 

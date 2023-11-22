@@ -7,14 +7,6 @@
     file: roles/node-with-nvm/vars/main.yml
     name: node_vars
 
-- name: Clone or update neurone-gm repository
-  debug:
-    var: neuronegm_directory
-
-- name: Debug user environment
-  debug:
-    msg: "HOME: {{ ansible_env.HOME }}, USER: {{ ansible_env.USER }}"
-
 
 - name: Clone or update neurone-gm repository
   git:
@@ -27,7 +19,7 @@
 - name: Install dependencies.
   community.general.npm:
     path: "{{ neuronegm_server_directory }}"
-    executable: "~/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
 
 #Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
@@ -36,7 +28,6 @@
 - name: Run the command "pm2 ls"
   ansible.builtin.command: pm2 ls
   register: pm2_processes
-  #ignore_errors: true
 
 - name: Analyse the output looking for the 'neuronegm' process
   ansible.builtin.set_fact:

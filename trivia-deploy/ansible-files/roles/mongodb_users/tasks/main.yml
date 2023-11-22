@@ -4,17 +4,28 @@
   ignore_errors: true # This is added because when running this task for the second time, authentication with the previously created user is required, which is redundant and unnecessary. Therefore, in case of an error, it is ignored.
   community.mongodb.mongodb_user:
 
-    # These lines should be added if you want to update the data of an existing root user or add a new one
-    # You need to log in with the credentials of an existing root user
-    # login_user: gerardo
-    # login_password: gerardo321
-    # login_port: 27017
     database: "{{ admin_database }}"
     name: "{{ mongodb_root_user }}"
     password: "{{ mongodb_root_password }}"
-    #roles: readWrite,dbAdmin,userAdmin
     roles: root
     state: present
+
+
+- name: Update root user in MongoDB if is necessary
+  ignore_errors: true
+  community.mongodb.mongodb_user:
+
+    # These lines should be added if you want to update the data of an existing root user or add a new one
+    # You need to log in with the credentials of an existing root user
+    login_user: "{{ mongodb_root_user }}"
+    login_password: "{{ mongodb_root_password }}"
+
+    database: "{{ admin_database }}"
+    name: "{{ mongodb_root_user }}"
+    password: "{{ mongodb_root_password }}"
+    roles: root
+    state: present
+
 
 - name: Create neuroneAdmin user
   community.mongodb.mongodb_user:
