@@ -1,2 +1,10 @@
 ---
 # defaults file for mongodb_users
+
+admin_database: "admin"
+
+mongodb_root_user: "root"
+mongodb_root_password: "root123"
+
+mongodb_admin_user: "neuroneAdmin"
+mongodb_admin_password: "DK,V-Dk6-*Pd-PM"

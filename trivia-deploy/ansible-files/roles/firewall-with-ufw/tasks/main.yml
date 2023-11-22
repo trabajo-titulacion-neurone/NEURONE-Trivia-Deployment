@@ -1,0 +1,42 @@
+---
+# tasks file for firewall-with-ufw
+- name: Install UFW
+  become: true
+  apt:
+    name: ufw
+    state: present
+
+- name: Allow all access to tcp port 22
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Allow incoming connections to Nginx Full (HTTP and HTTPS)"
+  become: true
+  community.general.ufw:
+    rule: allow
+    name: Nginx Full
+
+- name: Allow all access to tcp port 3005
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '3005'
+
+- name: Allow all access to tcp port 3007
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '3007'
+
+- name: Reload ufw
+  become: true
+  community.general.ufw:
+    state: reloaded
+
+- name: Enable ufw
+  become: true
+  community.general.ufw:
+    state: enabled

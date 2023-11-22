@@ -3,35 +3,57 @@
   # Roles to execute
 
   roles:
-    #A swap space is created if it does not exist
-    - add-swap-space
+
+    #A swap space (2GB) is created if it does not exist
+    - {role: add-swap-space, swap_space: 2G}
 
     # Package update and upgrade
-    - update-upgrade-packages
+    - {role: update-upgrade-packages}
 
     #Docker Installation
-    - docker-installation
+    - {role: docker-installation}
 
     # Basic installation of Nginx
-    - nginx
+    - {role: nginx}
 
     # Installation of NodeJS and global packages using Node Version Manager (NVM)
-    - node-with-nvm
+    - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
 
     # Installation of MongoDB and configuration of users
-    - mongodb
-    - mongodb_users
+    - {role: mongodb}
+
+    - {role: mongodb_users, 
+        admin_database: "admin", 
+        mongodb_root_user: "root", 
+        mongodb_root_password: "root123", 
+        mongodb_admin_user: "neuroneAdmin", 
+        mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
+      }
 
     # Installation of the neurone-gm (Server) module or API using pm2
-    - neurone-gm
+    - {role: neurone-gm, 
+        neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git", 
+        neuronegm_directory: "~/apps/NEURONE-GM", 
+        neuronegm_server_directory: "~/apps/NEURONE-GM/Server", 
+        neuronegm_server_pm2_process_name: "Neuronegm-Server"
+      }
       
-
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
-    - GAME
+    - {role: GAME, 
+        trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git", 
+        trivia_directory: "~/apps/GAME", 
+        trivia_server_directory: "~/apps/GAME/Server", 
+        trivia_client_directory: "~/apps/GAME/Client", 
+        trivia_server_pm2_process_name: "Trivia-Server"
+      }
+
+    # Firewall
+    - {role: firewall-with-ufw}
     
 
   serial: 1 # Number of hosts simultaneously executing the playbook
   tasks:
+
     
 
 

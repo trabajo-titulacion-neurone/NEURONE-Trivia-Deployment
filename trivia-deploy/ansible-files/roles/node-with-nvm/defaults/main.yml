@@ -1,2 +1,9 @@
 ---
 # defaults file for node-with-nvm
+
+#Node version to be installed and activated.
+node_version: "10.19.0"
+
+#Angular version to be installed globally
+# angular_version: "16.2.10"
+angular_version: "9.1.13"

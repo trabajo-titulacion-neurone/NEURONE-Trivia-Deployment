@@ -1,2 +1,5 @@
 ---
 # defaults file for add-swap-space
+
+#2GB are defined for swap space
+swap_space: 2G

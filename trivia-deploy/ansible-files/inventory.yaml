@@ -1,7 +1,7 @@
 webservers:
   hosts:
     neurone-trivia-dev:
-      ansible_host: 159.89.49.101
+      ansible_host: 167.172.158.134
       ansible_user: gerardoluceroc
 
   vars:

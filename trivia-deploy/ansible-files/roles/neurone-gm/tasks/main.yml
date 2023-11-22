@@ -2,10 +2,15 @@
 # tasks file for neurone-gm
 
 
-- name: Node version being used is loaded to link it with nvm
-  ansible.builtin.include_vars:
-    file: roles/node-with-nvm/vars/main.yml
-    name: node_vars
+# - name: Node version being used is loaded to link it with nvm
+#   ansible.builtin.include_vars:
+#     file: roles/node-with-nvm/defaults/main.yml
+#     name: node_vars
+
+
+- name: Get Node.js version
+  ansible.builtin.command: "node --version"
+  register: node_version
 
 
 - name: Clone or update neurone-gm repository
@@ -19,7 +24,7 @@
 - name: Install dependencies.
   community.general.npm:
     path: "{{ neuronegm_server_directory }}"
-    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_vars.node_version }}/bin/npm"
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
 
 #Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
