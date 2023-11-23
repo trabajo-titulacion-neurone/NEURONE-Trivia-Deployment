@@ -12,7 +12,8 @@ Open the inventory.yaml file in a text editor:
 nano inventory.yaml
 ```
 
-Adjust the value of the ansible_host property into webservers group with the IP address of the server you wish to connect to.
+* Adjust the value of the ansible_host property into the webservers group with the IP address of the server you wish to connect to.
+* Adjust the value of the ansible_user property into the webservers group with the authorized username for the server you wish to connect to.
 ```yaml
 webservers:
   hosts:
