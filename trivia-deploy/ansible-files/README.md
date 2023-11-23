@@ -50,7 +50,7 @@ Next, add your SSH key to the list of keys authorized by the server using ssh-co
 ```bash
 ssh-copy-id <SERVER_USERNAME>@<SERVER_IP_ADDRESS>
 ```
-Then, enter the password associated with the user when prompted
+Then, enter the password associated with the user when prompted.
 
 
 ## Running the Ansible Playbook
