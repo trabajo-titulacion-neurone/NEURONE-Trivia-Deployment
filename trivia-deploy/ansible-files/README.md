@@ -24,7 +24,7 @@ webservers:
   vars:
     ansible_python_interpreter: /usr/bin/python3
 ```
-Run the playbook using the following command with "-K" flag to introduce the sudo (Become) password by terminal:
+Run the playbook using the following command with the "-K" flag to input the sudo (Become) password via the terminal when prompted:
 ```bash
 ansible-playbook -i inventory.yaml playbook.yaml -K
 ```
