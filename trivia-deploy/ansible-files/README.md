@@ -24,9 +24,9 @@ webservers:
   vars:
     ansible_python_interpreter: /usr/bin/python3
 ```
-Run the playbook using the following command:
+Run the playbook using the following command with "-K" flag to introduce the sudo (Become) password by terminal:
 ```bash
-ansible-playbook -i inventory.yaml playbook.yaml
+ansible-playbook -i inventory.yaml playbook.yaml -K
 ```
 The playbook will execute and configure the server according to the specifications provided in the configuration files.
 
