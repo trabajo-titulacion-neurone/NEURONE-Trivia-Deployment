@@ -16,12 +16,12 @@ Adjust the value of the ansible_host property into webservers group with the IP 
 ```yaml
 webservers:
   hosts:
-    neurone_trivia_server:
+    neurone-trivia-dev:
       ansible_host: <SERVER_IP_ADDRESS>
-      ansible_user: root
+      ansible_user: <SERVER_USERNAME>
+
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    ansible_user: root
 ```
 Run the playbook using the following command:
 ```bash
