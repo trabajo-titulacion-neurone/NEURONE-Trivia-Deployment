@@ -1,0 +1,26 @@
+---
+# defaults file for NEURONE-Core
+NEURONE_USERNAME: "{{ ansible_user }}"
+NEURONE_USERID: ""
+NEURONE_MONGO_PATH: "{{ ansible_env.HOME }}/neuroneDatabase"
+NEURONE_ASSET_PATH: "{{ ansible_env.HOME }}/neuroneAssets"
+NEURONE_INDEX_PATH: "{{ ansible_env.HOME }}/neuroneIndex"
+NEURONE_ADMIN_DB_USER: admin
+NEURONE_ADMIN_DB_PASS: neurone2017
+NEURONE_DB: neurone
+NEURONE_DB_USER: neurone
+NEURONE_DB_PASS: neurone2017
+NEURONE_SOLR_CORE: neurone
+NEURONE_HOST: localhost
+NEURONE_APP_PORT: 3000
+NEURONE_FALLBACK_APP_PORT: 81
+NEURONE_DB_PORT: 1313
+NEURONE_INDEX_PORT: 1314
+NEURONE_DEV_SOLR_HOST: localhost
+NEURONE_DEV_SOLR_PORT: 8983
+NEURONE_DEV_SOLR_CORE: neurone
+NEURONE_LOCALE: en
+NEURONE_STORE_URL: http://localhost:4000/
+MAPTILER_KEY: XNctrGMVMOj0xErblNkx
+CS_EVALUATION: "evaluation_service:8000"
+CS_RECOMENDATION: "recomendation_service:9000"

@@ -19,3 +19,36 @@
       name: docker-ce
       state: latest
       update_cache: true
+
+# Dependencies for NEURONE core
+
+  - name: Update apt and install docker-ce-cli
+    become: true
+    apt:
+      name: docker-ce-cli
+      state: latest
+      update_cache: true
+
+  - name: Update apt and install containerd.io
+    become: true
+    apt:
+      name: containerd.io
+      state: latest
+      update_cache: true
+
+  - name: Update apt and install docker-compose
+    become: true
+    apt:
+      name: docker-compose
+      state: latest
+      update_cache: true
+
+  - name: Enable using Docker for current user (without requiring sudo)
+    become: true
+    ansible.builtin.shell: usermod -aG docker $(whoami)
+
+  - name: Restart Docker service
+    become: true
+    ansible.builtin.systemd_service:
+      name: docker
+      state: restarted

@@ -37,6 +37,12 @@
     # Firewall
     - {role: firewall-with-ufw}
 
+    # Installation of Trivia Server using pm2 and Trivia Client using Angular
+    - {role: NEURONE-Core, 
+        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+        neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master", 
+      }
+
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git", 
@@ -45,13 +51,10 @@
         neuronegm_server_pm2_process_name: "Neuronegm-Server"
       }
       
-    # Installation of Trivia Server using pm2 and Trivia Client using Angular
-    - {role: GAME, 
-        trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git", 
-        trivia_directory: "~/apps/GAME", 
-        trivia_server_directory: "~/apps/GAME/Server", 
-        trivia_client_directory: "~/apps/GAME/Client", 
-        trivia_server_pm2_process_name: "Trivia-Server"
+    # Installation of NEURONE-Core
+    - {role: NEURONE-Core, 
+        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+        neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master", 
       }
 
   tasks:
