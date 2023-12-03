@@ -45,7 +45,7 @@
     chdir: "{{ neuronegm_server_directory }}"
   when: running_process
 
-- name: Ejecutar el comando PM2 (start) si el proceso no está en ejecución o no está creado
+- name: Execute the PM2 command (start) if the process is not running or not created
   ansible.builtin.command: pm2 start app.js --name {{ neuronegm_server_pm2_process_name }}
   args:
     chdir: "{{ neuronegm_server_directory }}"

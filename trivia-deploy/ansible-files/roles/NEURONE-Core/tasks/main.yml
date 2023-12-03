@@ -1,63 +1,42 @@
----
+# ---
 # tasks file for NEURONE-Core
-  # - name: Update apt and install ca-certificates
-  #   become: true
-  #   apt:
-  #     name: ca-certificates
-  #     state: latest
-  #     update_cache: true
+- name: Update apt and install ca-certificates
+  become: true
+  apt:
+    name: ca-certificates
+    state: latest
+    update_cache: true
 
-  # - name: Update apt and install curl
-  #   become: true
-  #   apt:
-  #     name: curl
-  #     state: latest
-  #     update_cache: true
+- name: Update apt and install curl
+  become: true
+  apt:
+    name: curl
+    state: latest
+    update_cache: true
 
-  # - name: Update apt and install gnupg
-  #   become: true
-  #   apt:
-  #     name: gnupg
-  #     state: latest
-  #     update_cache: true
+- name: Update apt and install gnupg
+  become: true
+  apt:
+    name: gnupg
+    state: latest
+    update_cache: true
 
-  # - name: Update apt and install lsb-release
-  #   become: true
-  #   apt:
-  #     name: lsb-release
-  #     state: latest
-  #     update_cache: true
+- name: Update apt and install lsb-release
+  become: true
+  apt:
+    name: lsb-release
+    state: latest
+    update_cache: true
 
-  # - name: Clone or update neurone core repository
-  #   git:
-  #     repo: "{{ neurone_repository }}"
-  #     dest: "{{ neurone_directory }}"
-  #     clone: yes
-  #     update: yes
-  #     # force: yes
+- name: Clone or update neurone core repository
+  git:
+    repo: "{{ neurone_repository }}"
+    dest: "{{ neurone_directory }}"
+    clone: yes
+    update: yes
+    force: yes
 
-  # - name: Create neuroneAssets folder if not exist
-  #   ansible.builtin.file:
-  #     path: "{{ ansible_env.HOME }}/neuroneAssets"
-  #     state: directory
-
-  # - name: Create neuroneDatabase folder if not exist
-  #   ansible.builtin.file:
-  #     path: "{{ ansible_env.HOME }}/neuroneDatabase"
-  #     state: directory
-
-  # - name: build neurone
-  #   # become: true
-  #   # become_user: root
-  #   ansible.builtin.script: "{{ neurone_directory }}/neurone-build.sh"
-  #   # args:
-  #   #   chdir: "{{ neurone_directory }}"
-
-
-
-
-
-- name: Crear directorios en el sistema de archivos
+- name: Create directories in the file system
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -70,10 +49,28 @@
     - "{{ NEURONE_INDEX_PATH }}"
   become: true
 
-- name: Construir imágenes de implementación de NEURONE con Docker Compose
-  ansible.builtin.command: "docker-compose -p neurone build"
+- name: Build NEURONE images with Docker Compose
+  ansible.builtin.shell:
+    cmd: |
+      set -o allexport
+      source {{ neurone_directory }}/dotenv
+      set +o allexport
+      docker-compose -p neurone build
   become: true
   args:
+    chdir: "{{ neurone_directory }}"
+  
+- name: Start NEURONE with Docker Compose
+  ansible.builtin.shell:
+  #docker compose -p neurone up --force-recreate -d
+    cmd: |
+      set -o allexport
+      source {{ neurone_directory }}/dotenv
+      set +o allexport
+      docker compose -p neurone up -d
+  become: true
+  args:
+    executable: /bin/bash
     chdir: "{{ neurone_directory }}"
 
 
@@ -93,23 +90,11 @@
 
 
 
-
-
-
-
-
-
-  # - name: Build NEURONE-Core with shell script
-  #   become: true
-  #   ansible.builtin.shell: "./neurone-build.sh"
-  #   args:
-  #     chdir: "{{neurone_directory}}"
-  
-  # - name: Start NEURONE-Core with shell script
-  #   become: true
-  #   ansible.builtin.shell: "./neurone-start.sh"
-  #   args:
-  #     chdir: "{{neurone_directory}}"
-
+# - name: Start NEURONE with Docker Compose
+#   ignore_errors: true
+#   become: true
+#   ansible.builtin.command: docker compose -p neurone up --force-recreate -d
+#   args:
+#     chdir: "{{ neurone_directory }}"
 
 

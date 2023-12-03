@@ -2,14 +2,31 @@
 # tasks file for nginx
 
 ############################# Instalacion y activacion de nginx ###########################################################
-  - name: install and check nginx latest version
-    become: true
-    apt:
-      name: nginx
-      state: latest
+- name: install and check nginx latest version
+  become: true
+  apt:
+    name: nginx
+    state: latest
+
+- name: start nginx
+  become: true
+  service:
+    name: nginx
+    state: started
+
+- name: Copy Nginx configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ role_path }}/templates/game.conf"
+    dest: /etc/nginx/sites-available/game.conf
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"     
+    mode: 0644
+  notify:
+    - Reload Nginx
   
-  - name: start nginx
-    become: true
-    service:
-      name: nginx
-      state: started
+- name: Activate Game config
+  become: true
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game.conf /etc/nginx/sites-enabled/
+  notify:
+  - Reload Nginx
