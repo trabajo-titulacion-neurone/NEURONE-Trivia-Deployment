@@ -49,14 +49,24 @@
     - "{{ NEURONE_INDEX_PATH }}"
   become: true
 
-- name: Build NEURONE images with Docker Compose
+- name: Upload NEURONE-Core images from tar files
+  ignore_errors: true
+  ansible.builtin.shell: > 
+    docker load --input neurone.tar
+    docker load --input mongo.tar
+  args:
+    chdir: "{{ neurone_core_images_path }}"
+
+- name: Build NEURONE-Core images with Docker Compose
+  ignore_errors: true
   ansible.builtin.shell: docker-compose -p neurone build
   become: true
   args:
     executable: /bin/bash
     chdir: "{{ neurone_directory }}"
+  when: build_neurone_core_on_server
   
-- name: Start NEURONE with Docker Compose
+- name: Start NEURONE-Core with Docker Compose
   ansible.builtin.shell:
   #docker compose -p neurone up --force-recreate -d
     cmd: |

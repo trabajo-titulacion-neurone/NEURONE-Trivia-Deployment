@@ -28,6 +28,16 @@ resource "digitalocean_droplet" "my_droplet" {
 
 }
 
+resource "digitalocean_droplet" "my_droplet_2" {
+  image  = var.droplet_image
+  name   = "trivia-neurone-server"
+  region = var.droplet_region
+  size   = var.droplet_size
+  # ssh_keys = [digitalocean_ssh_key.local_public_key.fingerprint]
+  ssh_keys = [var.fingerprint_ssh_key_digitalocean]
+
+}
+
 output "droplet_ipv4_address" {
   value = digitalocean_droplet.my_droplet.ipv4_address
 }
