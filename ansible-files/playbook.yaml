@@ -40,7 +40,7 @@
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
         trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
-        trivia_directory: "~/apps/GAME", 
+        trivia_directory: "{{ ansible_env.HOME }}/apps/GAME", 
         trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
         trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
         trivia_server_pm2_process_name: "Trivia-Server",
