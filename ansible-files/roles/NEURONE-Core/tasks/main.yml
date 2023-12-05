@@ -49,13 +49,24 @@
     - "{{ NEURONE_INDEX_PATH }}"
   become: true
 
-- name: Upload NEURONE-Core images from tar files
+
+- name: Load NEURONE-Core image
   ignore_errors: true
-  ansible.builtin.shell: > 
-    docker load --input neurone.tar
-    docker load --input mongo.tar
-  args:
-    chdir: "{{ neurone_core_images_path }}"
+  become: true
+  community.docker.docker_image:
+    name: dgacitua/neurone
+    load_path: "{{ neurone_core_images_path }}/neurone.tar"
+    source: load
+    state: present
+
+- name: Load MongoDB image
+  ignore_errors: true
+  become: true
+  community.docker.docker_image:
+    name: dgacitua/mongo
+    load_path: "{{ neurone_core_images_path }}/mongo.tar"
+    source: load
+    state: present
 
 - name: Build NEURONE-Core images with Docker Compose
   ignore_errors: true
