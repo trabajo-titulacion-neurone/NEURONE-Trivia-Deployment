@@ -61,7 +61,7 @@
     - {role: NEURONE-Core, 
         neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
         neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master",
-        build_neurone_core_on_server: true,
+        build_neurone_core_on_server: false,
         neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images" 
       }
 
