@@ -10,61 +10,73 @@
   ansible.builtin.command: "node --version"
   register: node_version
 
-- name: Clone or update trivia repository
-  git:
-    repo: "{{ trivia_repository }}"
-    dest: "{{ trivia_directory }}"
-    clone: yes
-    update: yes
-    force: yes #This is added due to an issue with modifying the package-lock.json in the local repository.
+# - name: Clone or update trivia repository
+#   git:
+#     repo: "{{ trivia_repository }}"
+#     dest: "{{ trivia_directory }}"
+#     clone: yes
+#     update: yes
+#     force: yes #This is added due to an issue with modifying the package-lock.json in the local repository.
 
+# - name: Install trivia-client dependencies.
+#   community.general.npm:
+#     path: "{{ trivia_client_directory }}"
+#     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
 
-- name: Install trivia-client dependencies.
-  community.general.npm:
-    path: "{{ trivia_client_directory }}"
-    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
-
-# - name: Build Frontend
+# - name: Build Trivia frontend on remote server
 #   become: true
 #   ansible.builtin.command: ng build --prod --output-path ../Server/public
 #   args:
 #     chdir: "{{ trivia_client_directory }}"
+#   when: build_trivia_frontend_on_server
 
-
-
-- name: Install trivia-server dependencies.
-  community.general.npm:
-    path: "{{ trivia_server_directory }}"
-    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
-
-#Saved processes are restored in case of a server reboot
-- name: pm2 resurrect
-  ansible.builtin.command: pm2 resurrect
-
-- name: Run the command "pm2 ls"
-  ansible.builtin.command: pm2 ls
-  register: pm2_processes
-
-- name: Analyse the output looking for the 'trivia-server' process
-  #The boolean response is stored in the variable 'running_process'.
-  ansible.builtin.set_fact:
-    running_process: "{{ trivia_server_pm2_process_name in pm2_processes.stdout }}"
-
-
-- name: Execute the PM2 command (restart) if the process is running
-  ansible.builtin.command: pm2 restart {{ trivia_server_pm2_process_name }}
+- name: Build Trivia Frontend on Localhost
+  ansible.builtin.shell: ng build --prod --output-path ../Server/public
+  become: true
   args:
-    chdir: "{{ trivia_server_directory }}"
-  when: running_process
+    chdir: "{{ trivia_localhost_path }}/Client"
+  delegate_to: 127.0.0.1 
+  when: build_and_send_trivia_frontend_from_localhost
 
-- name: Execute the PM2 command (start) if the process is not running or not created.
-  ansible.builtin.command: pm2 start app.js --name {{ trivia_server_pm2_process_name }}
-  args:
-    chdir: "{{ trivia_server_directory }}"
-  when: not running_process
+- name: Send Build of Trivia from localhost to remote server
+  ansible.posix.synchronize:
+    src: "{{ trivia_localhost_path }}/Server/public"
+    dest: "{{ trivia_server_directory }}"
+  when: build_and_send_trivia_frontend_from_localhost
 
-# Save current process list
-- name: pm2 save
-  ansible.builtin.command: pm2 save
+# - name: Install trivia-server dependencies.
+#   community.general.npm:
+#     path: "{{ trivia_server_directory }}"
+#     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
+
+# #Saved processes are restored in case of a server reboot
+# - name: pm2 resurrect
+#   ansible.builtin.command: pm2 resurrect
+
+# - name: Run the command "pm2 ls"
+#   ansible.builtin.command: pm2 ls
+#   register: pm2_processes
+
+# - name: Analyse the output looking for the 'trivia-server' process
+#   #The boolean response is stored in the variable 'running_process'.
+#   ansible.builtin.set_fact:
+#     running_process: "{{ trivia_server_pm2_process_name in pm2_processes.stdout }}"
+
+
+# - name: Execute the PM2 command (restart) if the process is running
+#   ansible.builtin.command: pm2 restart {{ trivia_server_pm2_process_name }}
+#   args:
+#     chdir: "{{ trivia_server_directory }}"
+#   when: running_process
+
+# - name: Execute the PM2 command (start) if the process is not running or not created.
+#   ansible.builtin.command: pm2 start app.js --name {{ trivia_server_pm2_process_name }}
+#   args:
+#     chdir: "{{ trivia_server_directory }}"
+#   when: not running_process
+
+# # Save current process list
+# - name: pm2 save
+#   ansible.builtin.command: pm2 save
 
 

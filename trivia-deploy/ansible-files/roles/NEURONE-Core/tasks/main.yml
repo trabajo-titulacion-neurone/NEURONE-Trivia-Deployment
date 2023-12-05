@@ -50,14 +50,10 @@
   become: true
 
 - name: Build NEURONE images with Docker Compose
-  ansible.builtin.shell:
-    cmd: |
-      set -o allexport
-      source {{ neurone_directory }}/dotenv
-      set +o allexport
-      docker-compose -p neurone build
+  ansible.builtin.shell: docker-compose -p neurone build
   become: true
   args:
+    executable: /bin/bash
     chdir: "{{ neurone_directory }}"
   
 - name: Start NEURONE with Docker Compose

@@ -1,9 +1,12 @@
 ---
 # defaults file for GAME
-trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git"
+trivia_repository: "https://github.com/NEURONE-IL/GAME.git"
 
 #Path where the Trivia repository will be stored on the server.
 trivia_directory: "~/apps/GAME"
+
+#Path where Trivia folder is located to build the application from the local machine where playbook runs
+trivia_localhost_path: "/home/gerardo/Escritorio/WORKSPACE/trabajo-titulacion-neurone/neurone-trivia"
 
 #Path where the Trivia Server folder will be stored on the server.
 trivia_server_directory: "~/apps/GAME/Server"
@@ -13,3 +16,6 @@ trivia_client_directory: "~/apps/GAME/Client"
 
 #Name of the pm2 process running Trivia server will have.
 trivia_server_pm2_process_name: "Trivia-Server"
+
+build_trivia_frontend_on_server: false 
+build_and_send_trivia_frontend_from_localhost: false

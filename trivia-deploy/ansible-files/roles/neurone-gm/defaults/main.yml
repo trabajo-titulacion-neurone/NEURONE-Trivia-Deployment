@@ -1,6 +1,6 @@
 ---
 # defaults file for neurone-gm
-neuronegm_repository: "https://github.com/trabajo-titulacion-neurone/modulo-neurone-gm.git"
+neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git"
 
 
 #Path where the neurone-gm repository will be stored on the server.
