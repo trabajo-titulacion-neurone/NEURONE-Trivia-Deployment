@@ -1,5 +1,5 @@
-- hosts: webservers
-  serial: 1 # Number of hosts simultaneously executing the playbook
+- hosts: localhost
+  connection: local
 
   # Roles to execute
 
@@ -7,9 +7,6 @@
 
     # Package update and upgrade
     - {role: update-upgrade-packages}
-
-    # Server reboot
-    - {role: reboot-and-wait}
 
     # A swap space (2GB) is created if it does not exist
     - {role: add-swap-space, swap_space: 2G}
@@ -34,8 +31,8 @@
         mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
       }
 
-    # Firewall
-    - {role: firewall-with-ufw}
+    # # Firewall
+    # - {role: firewall-with-ufw}
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
@@ -44,7 +41,7 @@
         trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
         trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
         trivia_server_pm2_process_name: "Trivia-Server",
-        build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
+        build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required) 
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
         trivia_localhost_path: "", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
@@ -68,5 +65,3 @@
   tasks:
 
     
-
-

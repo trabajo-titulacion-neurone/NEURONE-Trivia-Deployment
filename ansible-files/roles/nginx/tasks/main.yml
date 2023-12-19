@@ -8,22 +8,22 @@
     name: nginx
     state: latest
 
-- name: Copy Nginx configuration file
-  become: true
-  ansible.builtin.copy:
-    src: "{{ role_path }}/templates/game.conf"
-    dest: /etc/nginx/sites-available/game.conf
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"     
-    mode: 0644
-  notify:
-    - Reload Nginx
+# - name: Copy Nginx configuration file
+#   become: true
+#   ansible.builtin.copy:
+#     src: "{{ role_path }}/templates/game.conf"
+#     dest: /etc/nginx/sites-available/game.conf
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"     
+#     mode: 0644
+#   notify:
+#     - Reload Nginx
   
-- name: Activate Game config
-  become: true
-  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game.conf /etc/nginx/sites-enabled/
-  notify:
-  - Reload Nginx
+# - name: Activate Game config
+#   become: true
+#   ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game.conf /etc/nginx/sites-enabled/
+#   notify:
+#   - Reload Nginx
 
 - name: start nginx
   ignore_errors: true
