@@ -1,3 +1,5 @@
+#RUN: ansible-playbook localhost-deploy.yaml -K --extra-vars "ansible_user=<USERNAME>"
+
 - hosts: localhost
   connection: local
 
@@ -7,9 +9,6 @@
 
     # Package update and upgrade
     - {role: update-upgrade-packages}
-
-    # A swap space (2GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 2G}
 
     #Docker Installation
     - {role: docker-installation}
@@ -41,7 +40,7 @@
         trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
         trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
         trivia_server_pm2_process_name: "Trivia-Server",
-        build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required) 
+        build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required) 
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
         trivia_localhost_path: "", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
@@ -63,5 +62,9 @@
       }
 
   tasks:
+
+  - name: update
+    become: true
+    ansible.builtin.shell: sudo apt update
 
     
