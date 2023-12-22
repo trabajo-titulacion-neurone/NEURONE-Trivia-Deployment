@@ -43,6 +43,7 @@
         trivia_directory: "{{ ansible_env.HOME }}/apps/GAME", 
         trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
         trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
+        directory_of_build_of_trivia_sent: "{{ ansible_env.HOME }}/build-trivia-frontend/public" #path of build of Trivia sent by localhost or Github Actions to upload to the trivia-server folder
         trivia_server_pm2_process_name: "Trivia-Server",
         build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
