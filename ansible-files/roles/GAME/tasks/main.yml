@@ -22,6 +22,12 @@
   community.general.npm:
     path: "{{ trivia_client_directory }}"
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
+    
+- name: Load build of Trivia sent by localhost or Github Actions
+  become: true
+  ansible.builtin.command: "mv {{ ansible_env.HOME }}/build-trivia-frontend/public {{ trivia_server_directory }}"
+  args:
+  creates: "{{ ansible_env.HOME }}/build-trivia-frontend/public"
 
 - name: Build Trivia frontend on remote server
   become: true
