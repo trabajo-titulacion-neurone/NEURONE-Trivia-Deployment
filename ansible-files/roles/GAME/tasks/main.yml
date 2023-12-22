@@ -6,6 +6,7 @@
 #     file: roles/node-with-nvm/defaults/main.yml
 #     name: node_vars
 
+
 - name: Get Node.js version
   ansible.builtin.command: "node --version"
   register: node_version
