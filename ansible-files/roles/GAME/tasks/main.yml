@@ -35,7 +35,7 @@
 - name: Send Build of Trivia from localhost to remote server
   ansible.posix.synchronize:
     src: "{{ trivia_localhost_path }}/Server/public"
-    dest: "{{ trivia_server_directory }}"
+    dest: "{{ directory_of_build_of_trivia_sent }}"
   when: build_and_send_trivia_frontend_from_localhost
     
 - name: Check if the public folder exists or was sent by localhost or Github Actions
@@ -43,9 +43,17 @@
     path: "{{ directory_of_build_of_trivia_sent }}"
   register: public_folder
     
+# - name: Load build of Trivia sent by localhost or Github Actions
+#   become: true
+#   ansible.builtin.command: "mv {{ directory_of_build_of_trivia_sent }} {{ trivia_server_directory }}"
+#   when: public_folder.stat.isdir is defined and public_folder.stat.isdir
+
 - name: Load build of Trivia sent by localhost or Github Actions
   become: true
-  ansible.builtin.command: "mv {{ directory_of_build_of_trivia_sent }} {{ trivia_server_directory }}"
+  ansible.posix.synchronize:
+    src: "{{ directory_of_build_of_trivia_sent }}"
+    dest: "{{ trivia_server_directory }}"
+  delegate_to: "{{ ansible_host }}"
   when: public_folder.stat.isdir is defined and public_folder.stat.isdir
 
 - name: Build Trivia frontend on remote server
