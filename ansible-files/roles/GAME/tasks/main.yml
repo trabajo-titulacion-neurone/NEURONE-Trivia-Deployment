@@ -53,7 +53,7 @@
   ansible.posix.synchronize:
     src: "{{ directory_of_build_of_trivia_sent }}"
     dest: "{{ trivia_server_directory }}"
-  delegate_to: "{{ ansible_host }}"
+  delegate_to: "{{ inventory_hostname }}"
   when: public_folder.stat.isdir is defined and public_folder.stat.isdir
 
 - name: Build Trivia frontend on remote server

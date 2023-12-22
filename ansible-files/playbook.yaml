@@ -5,37 +5,37 @@
 
   roles:
 
-    # Package update and upgrade
-    - {role: update-upgrade-packages}
+    # # Package update and upgrade
+    # - {role: update-upgrade-packages}
 
-    # Server reboot
-    - {role: reboot-and-wait}
+    # # Server reboot
+    # - {role: reboot-and-wait}
 
-    # A swap space (2GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 2G}
+    # # A swap space (2GB) is created if it does not exist
+    # - {role: add-swap-space, swap_space: 2G}
 
-    #Docker Installation
-    - {role: docker-installation}
+    # #Docker Installation
+    # - {role: docker-installation}
 
-    # Basic installation of Nginx
-    - {role: nginx}
+    # # Basic installation of Nginx
+    # - {role: nginx}
 
-    # Installation of NodeJS and global packages using Node Version Manager (NVM)
-    - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
+    # # Installation of NodeJS and global packages using Node Version Manager (NVM)
+    # - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
 
-    # Installation of MongoDB and configuration of users
-    - {role: mongodb}
+    # # Installation of MongoDB and configuration of users
+    # - {role: mongodb}
 
-    - {role: mongodb_users, 
-        admin_database: "admin", 
-        mongodb_root_user: "root", 
-        mongodb_root_password: "root123", 
-        mongodb_admin_user: "neuroneAdmin", 
-        mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
-      }
+    # - {role: mongodb_users, 
+    #     admin_database: "admin", 
+    #     mongodb_root_user: "root", 
+    #     mongodb_root_password: "root123", 
+    #     mongodb_admin_user: "neuroneAdmin", 
+    #     mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
+    #   }
 
-    # Firewall
-    - {role: firewall-with-ufw}
+    # # Firewall
+    # - {role: firewall-with-ufw}
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
