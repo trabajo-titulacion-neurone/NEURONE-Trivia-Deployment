@@ -39,7 +39,7 @@
     
 - name: Check if the public folder exists or was sent by localhost or Github Actions
   ansible.builtin.stat:
-    path: {{ directory_of_build_of_trivia_sent }}
+    path: "{{ directory_of_build_of_trivia_sent }}"
   register: public_folder
     
 - name: Load build of Trivia sent by localhost or Github Actions
