@@ -43,11 +43,6 @@
     path: "{{ directory_of_build_of_trivia_sent }}"
   register: public_folder
     
-# - name: Load build of Trivia sent by localhost or Github Actions
-#   become: true
-#   ansible.builtin.command: "mv {{ directory_of_build_of_trivia_sent }} {{ trivia_server_directory }}"
-#   when: public_folder.stat.isdir is defined and public_folder.stat.isdir
-
 - name: Load build of Trivia sent by localhost or Github Actions
   become: true
   ansible.posix.synchronize:

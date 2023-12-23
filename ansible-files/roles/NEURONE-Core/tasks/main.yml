@@ -36,20 +36,6 @@
     update: yes
     force: yes
 
-- name: Create directories in the file system
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ NEURONE_USERNAME }}"
-    group: "{{ NEURONE_USERNAME }}"
-    mode: '0755'
-  loop:
-    - "{{ NEURONE_ASSET_PATH }}"
-    - "{{ NEURONE_MONGO_PATH }}"
-    - "{{ NEURONE_INDEX_PATH }}"
-  become: true
-
-
 - name: Load NEURONE-Core image
   ignore_errors: true
   become: true
@@ -68,14 +54,24 @@
     source: load
     state: present
 
+- name: Build NEURONE-Core with script neurone-build.sh
+  ignore_errors: true
+  become: true
+  ansible.builtin.shell: ./neurone-build.sh
+  args:
+    chdir: "{{ neurone_directory }}"
+    executable: /bin/bash
+  when: build_neurone_core_on_server
+  register: build_result
+  
 - name: Build NEURONE-Core images with Docker Compose
   ignore_errors: true
-  ansible.builtin.shell: docker-compose -p neurone build
+  ansible.builtin.shell: docker-compose -p neurone build 
   become: true
   args:
     executable: /bin/bash
     chdir: "{{ neurone_directory }}"
-  when: build_neurone_core_on_server
+  when: build_neurone_core_on_server and build_result.rc != 0 #activate if flag build_neurone_core_on_server and if task "Run neurone-build.sh" is finish with error
   
 - name: Start NEURONE-Core with Docker Compose
   ansible.builtin.shell:
@@ -89,6 +85,21 @@
   args:
     executable: /bin/bash
     chdir: "{{ neurone_directory }}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
