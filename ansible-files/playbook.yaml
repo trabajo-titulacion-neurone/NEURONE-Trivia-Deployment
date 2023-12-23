@@ -15,7 +15,7 @@
     - {role: reboot-and-wait}
 
     # A swap space (2GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 2G}
+    - {role: add-swap-space, swap_space: 4G}
 
     # Basic installation of Nginx
     - {role: nginx}

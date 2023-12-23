@@ -1,7 +1,7 @@
 variable "token_digitalocean" {
   description = "Token to connect to your DigitalOcean account"
   type    = string
-  default = "dop_v1_5563409e7afdc5757de6234f96882d4983b9ec9b62365ac05fb1f8fa664ad57a"
+  default = ""
 }
 
 variable "fingerprint_ssh_key_digitalocean" {
