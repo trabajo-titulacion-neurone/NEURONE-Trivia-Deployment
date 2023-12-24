@@ -11,6 +11,14 @@
     # Docker Installation
     - {role: docker-installation}
 
+    # Installation of NEURONE-Core
+    - {role: NEURONE-Core, 
+        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+        neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master",
+        build_neurone_core_on_server: true,
+        neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images" 
+      }
+
     # Server reboot
     - {role: reboot-and-wait}
 
@@ -36,14 +44,6 @@
 
     # Firewall
     - {role: firewall-with-ufw}
-
-    # Installation of NEURONE-Core
-    - {role: NEURONE-Core, 
-        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-        neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master",
-        build_neurone_core_on_server: true,
-        neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images" 
-      }
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
