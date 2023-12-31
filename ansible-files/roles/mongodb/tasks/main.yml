@@ -105,16 +105,16 @@
 # "security:\n  authorization: enabled" was written in the configuration file
 # as many times as there were executions.
 # Now, with this, it checks if the block has already been written before taking action.
-- name: Enable authentication in MongoDB
-  become: true
-  blockinfile:
-    path: /etc/mongod.conf
-    block: |
-      security:
-        authorization: enabled
-    insertafter: "^#security:"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    state: present
-    #backup: yes # Activated to create a backup of the file before making changes
-  notify: 
-    - Restart MongoDB Service
+# - name: Enable authentication in MongoDB
+#   become: true
+#   blockinfile:
+#     path: /etc/mongod.conf
+#     block: |
+#       security:
+#         authorization: enabled
+#     insertafter: "^#security:"
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK"
+#     state: present
+#     #backup: yes # Activated to create a backup of the file before making changes
+#   notify: 
+#     - Restart MongoDB Service

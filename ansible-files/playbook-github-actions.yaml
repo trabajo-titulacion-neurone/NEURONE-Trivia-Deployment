@@ -63,9 +63,7 @@
         trivia_localhost_path: "", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
 
-    # Basic installation of Nginx
+    # Installation and configuration of Nginx
     - {role: nginx}
 
   tasks:
-
-    

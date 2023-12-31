@@ -54,19 +54,6 @@
     source: load
     state: present
 
-# - name: Crear carpetasssssssss
-#   ignore_errors: true
-#   become: true
-#   ansible.builtin.shell: |
-#     mkdir -p {{ ansible_env.HOME }}/neuroneAssets
-#     mkdir -p {{ ansible_env.HOME }}/neuroneDatabase
-#     mkdir -p {{ ansible_env.HOME }}/neuroneIndex && chown -R 8983:8983 {{ ansible_env.HOME }}/neuroneIndex
-#   args:
-#     chdir: "{{ neurone_directory }}"
-#     executable: /bin/bash
-  # when: build_neurone_core_on_server
-  # register: build_result
-
 - name: Create Neurone directories
   become: true
   ansible.builtin.file:
@@ -76,9 +63,9 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
-    - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
-    - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983", mode: "0755" }
+    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0777" }
+    - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0777" }
+    - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983", mode: "0777" }
 
 - name: Build NEURONE-Core with script neurone-build.sh
   ignore_errors: true
@@ -111,83 +98,3 @@
   args:
     executable: /bin/bash
     chdir: "{{ neurone_directory }}"
-
-
-
-
-
-
-
-
-
-
-#PROBANDINGGGGGGGGGGGGGGGGGGGG
-
-# - name: Build NEURONE-Core images with Docker Compose
-#   ignore_errors: true
-#   ansible.builtin.shell: docker-compose -p neurone build 
-#   become: true
-#   args:
-#     # executable: /bin/bash
-#     chdir: "{{ neurone_directory }}"
-#   when: build_neurone_core_on_server and build_result.rc != 0 #activate if flag build_neurone_core_on_server and if task "Run neurone-build.sh" is finish with error
-#   async: 3600
-#   poll: 0
-#   register: build_neurone_result
-
-# - name: Wait for asynchronous job to end
-#   ansible.builtin.async_status:
-#     jid: "{{ build_neurone_result.ansible_job_id }}" 
-#   register: job_result
-#   until: job_result.finished
-#   retries: 360
-#   delay: 10
-
-# - name: Start NEURONE-Core with Docker Compose
-#   ansible.builtin.shell:
-#   #docker compose -p neurone up --force-recreate -d
-#     cmd: |
-#       set -o allexport
-#       source {{ neurone_directory }}/dotenv
-#       set +o allexport
-#       docker compose -p neurone up -d
-#   become: true
-#   args:
-#     executable: /bin/bash
-#     chdir: "{{ neurone_directory }}"
-#   when: job_result.finished
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# - name: Start NEURONE with Docker Compose
-#   ignore_errors: true
-#   become: true
-#   ansible.builtin.command: docker compose -p neurone up --force-recreate -d
-#   args:
-#     chdir: "{{ neurone_directory }}"
-
-
