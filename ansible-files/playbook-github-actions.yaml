@@ -31,9 +31,6 @@
         mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
       }
 
-    # Firewall
-    - {role: firewall-with-ufw}
-
     # Installation of NEURONE-Core
     - {role: NEURONE-Core, 
         neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
@@ -65,5 +62,8 @@
 
     # Installation and configuration of Nginx
     - {role: nginx}
+
+    # Firewall
+    - {role: firewall-with-ufw}
 
   tasks:
