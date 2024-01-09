@@ -45,6 +45,15 @@
     source: load
     state: present
 
+- name: Load NEURONE-Core2 image
+  ignore_errors: true
+  become: true
+  community.docker.docker_image:
+    name: dgacitua/neurone
+    load_path: "{{ neurone_core_images_path }}/neurone2.tar"
+    source: load
+    state: present
+
 - name: Load MongoDB image
   ignore_errors: true
   become: true
@@ -63,9 +72,9 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0777" }
-    - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0777" }
-    - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983", mode: "0777" }
+    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
+    - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
+    - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983", mode: "0755" }
 
 - name: Build NEURONE-Core with script neurone-build.sh
   ignore_errors: true
