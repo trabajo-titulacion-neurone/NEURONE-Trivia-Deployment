@@ -14,7 +14,7 @@
     # Server reboot
     - {role: reboot-and-wait}
 
-    # A swap space (2GB) is created if it does not exist
+    # A swap space (4GB) is created if it does not exist
     - {role: add-swap-space, swap_space: 4G}  
 
     # Installation of NodeJS and global packages using Node Version Manager (NVM)

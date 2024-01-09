@@ -27,10 +27,17 @@
 #     state: link
 #   notify:
 #   - Reload Nginx
-  
+
 - name: Activate Game config
   become: true
   ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_http.conf /etc/nginx/sites-enabled/
+  notify:
+  - Reload Nginx
+
+- name: Desactivate default config
+  become: true
+  ignore_errors: true
+  ansible.builtin.shell: rm /etc/nginx/sites-enabled/default
   notify:
   - Reload Nginx
 
