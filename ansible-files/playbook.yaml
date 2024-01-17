@@ -31,8 +31,6 @@
         mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
       }
 
-    # Firewall
-    - {role: firewall-with-ufw}
 
     # Installation of NEURONE-Core
     - {role: NEURONE-Core, 
@@ -65,6 +63,9 @@
 
     # Basic installation of Nginx
     - {role: nginx}
+
+    # Firewall
+    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 

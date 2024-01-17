@@ -14,7 +14,6 @@
     chdir: "{{ ansible_env.HOME }}" # Change the working directory to the user's home directory
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh" # Check if the 'nvm.sh' file already exists in the home directory.
 
-
 - name: Install Node 
   become: true
   shell: > # Activate NVM, then install a specific version of Node.js, and set it as the default
@@ -26,7 +25,6 @@
   
   loop: # Perform this task for multiple versions of Node.js
     - "{{ node_version }}" 
-
 
 #To make this work, you need to run the following command on the server to create a symbolic link with the default version of Node being used
 - name: Activate Node with a symbolic link

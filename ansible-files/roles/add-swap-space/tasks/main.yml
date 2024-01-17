@@ -32,7 +32,6 @@
   ansible.builtin.command: swapon /swapfile
   when: not swap_space_exists
 
-
 #Making the Swap File Permanent
 - name: Back up the /etc/fstab file in case anything goes wrong
   become: true
