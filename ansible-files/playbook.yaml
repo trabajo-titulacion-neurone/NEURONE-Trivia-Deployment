@@ -5,41 +5,41 @@
 
   roles:
 
-    # # Package update and upgrade
-    # - {role: update-upgrade-packages}
+    # Package update and upgrade
+    - {role: update-upgrade-packages}
 
-    # # Docker Installation
-    # - {role: docker-installation}
+    # Docker Installation
+    - {role: docker-installation}
 
-    # # Server reboot
-    # - {role: reboot-and-wait}
+    # Server reboot
+    - {role: reboot-and-wait}
 
-    # # A swap space (2GB) is created if it does not exist
-    # - {role: add-swap-space, swap_space: 4G}  
+    # A swap space (2GB) is created if it does not exist
+    - {role: add-swap-space, swap_space: 4G}  
 
-    # # Installation of NodeJS and global packages using Node Version Manager (NVM)
-    # - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
+    # Installation of NodeJS and global packages using Node Version Manager (NVM)
+    - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
 
-    # # Installation of MongoDB and configuration of users
-    # - {role: mongodb}
+    # Installation of MongoDB and configuration of users
+    - {role: mongodb}
 
-    # - {role: mongodb_users, 
-    #     admin_database: "admin", 
-    #     mongodb_root_user: "root", 
-    #     mongodb_root_password: "root123", 
-    #     mongodb_admin_user: "neuroneAdmin", 
-    #     mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
-    #   }
+    - {role: mongodb_users, 
+        admin_database: "admin", 
+        mongodb_root_user: "root", 
+        mongodb_root_password: "root123", 
+        mongodb_admin_user: "neuroneAdmin", 
+        mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
+      }
 
 
     # Installation of NEURONE-Core
     - {role: NEURONE-Core, 
         neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-        neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master",
-        neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images",
+        neurone_directory: "/apps/neurone-master",
+        neurone_core_images_path: "/neurone-images",
         build_neurone_core_on_server: false,
-        build_and_send_images_from_localhost: true,
-        neurone_repository_localhost_path: "/ansible-workspace/neurone-master"
+        build_and_send_images_from_localhost: true
+        # neurone_repository_localhost_path: "/ansible-workspace/neurone-master"
       }  
 
     # Installation of the neurone-gm (Server) module or API using pm2

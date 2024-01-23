@@ -54,7 +54,7 @@
 
 
 - name: Clone or update trivia repository
-  git:
+  ansible.builtin.git:
     repo: "{{ trivia_repository }}"
     dest: "{{ trivia_directory }}"
     clone: yes
