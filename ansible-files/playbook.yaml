@@ -53,21 +53,21 @@
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
         trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
-        trivia_directory: "{{ ansible_env.HOME }}/apps/GAME", 
-        trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
-        trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
-        directory_of_build_of_trivia_sent: "{{ ansible_env.HOME }}/build-trivia-frontend", #path of build of Trivia sent by localhost or Github Actions to upload to the trivia-server folder
+        trivia_directory: "/apps/GAME", 
+        trivia_server_directory: "/apps/GAME/Server", 
+        trivia_client_directory: "/apps/GAME/Client", 
+        # directory_of_build_of_trivia_sent: "{{ ansible_env.HOME }}/build-trivia-frontend/public", #path of build of Trivia sent by localhost or Github Actions to upload to the trivia-server folder
         trivia_server_pm2_process_name: "Trivia-Server",
         build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: true, #true if you want to build on localhost where playbook runs and send to server
-        trivia_localhost_path: "/ansible-workspace/GAME", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
+        # trivia_localhost_path: "/ansible-workspace/GAME", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
 
-    # # Basic installation of Nginx
-    # - {role: nginx}
+    # Basic installation of Nginx
+    - {role: nginx}
 
-    # # Firewall
-    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+    # Firewall
+    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 
