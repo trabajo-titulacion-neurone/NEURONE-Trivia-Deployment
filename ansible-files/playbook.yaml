@@ -36,32 +36,32 @@
     - {role: NEURONE-Core, 
         neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
         neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master",
+        neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images",
         build_neurone_core_on_server: false,
         build_and_send_images_from_localhost: true,
-        neurone_repository_localhost_path: "/appps/neurone-master",
-        neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images" 
+        neurone_repository_localhost_path: "/ansible-workspace/neurone-master"
       }  
 
-    # # Installation of the neurone-gm (Server) module or API using pm2
-    # - {role: neurone-gm, 
-    #     neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
-    #     neuronegm_directory: "{{ ansible_env.HOME }}/apps/NEURONE-GM", 
-    #     neuronegm_server_directory: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server", 
-    #     neuronegm_server_pm2_process_name: "Neuronegm-Server"
-    #   }
+    # Installation of the neurone-gm (Server) module or API using pm2
+    - {role: neurone-gm, 
+        neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
+        neuronegm_directory: "{{ ansible_env.HOME }}/apps/NEURONE-GM", 
+        neuronegm_server_directory: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server", 
+        neuronegm_server_pm2_process_name: "Neuronegm-Server"
+      }
 
-    # # Installation of Trivia Server using pm2 and Trivia Client using Angular
-    # - {role: GAME, 
-    #     trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
-    #     trivia_directory: "{{ ansible_env.HOME }}/apps/GAME", 
-    #     trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
-    #     trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
-    #     directory_of_build_of_trivia_sent: "{{ ansible_env.HOME }}/build-trivia-frontend/public", #path of build of Trivia sent by localhost or Github Actions to upload to the trivia-server folder
-    #     trivia_server_pm2_process_name: "Trivia-Server",
-    #     build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
-    #     build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
-    #     trivia_localhost_path: "", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
-    #   }
+    # Installation of Trivia Server using pm2 and Trivia Client using Angular
+    - {role: GAME, 
+        trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
+        trivia_directory: "{{ ansible_env.HOME }}/apps/GAME", 
+        trivia_server_directory: "{{ ansible_env.HOME }}/apps/GAME/Server", 
+        trivia_client_directory: "{{ ansible_env.HOME }}/apps/GAME/Client", 
+        directory_of_build_of_trivia_sent: "{{ ansible_env.HOME }}/build-trivia-frontend", #path of build of Trivia sent by localhost or Github Actions to upload to the trivia-server folder
+        trivia_server_pm2_process_name: "Trivia-Server",
+        build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
+        build_and_send_trivia_frontend_from_localhost: true, #true if you want to build on localhost where playbook runs and send to server
+        trivia_localhost_path: "/ansible-workspace/GAME", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
+      }
 
     # # Basic installation of Nginx
     # - {role: nginx}

@@ -29,7 +29,7 @@
     update_cache: true
 
 
-############### Build NEURONE-Core on localhost and send to remote server #######################################
+# ############### Build NEURONE-Core on localhost and send to remote server #######################################
 
 - name: Get the home directory of the user running the playbook on the control machine
   become: true
@@ -49,12 +49,11 @@
   when: build_and_send_images_from_localhost
 
 - name: Build neurone core on localhost
-  become: true
   ansible.builtin.shell: "./neurone-build.sh"
   args:
     chdir: "{{ local_home }}{{ neurone_repository_localhost_path }}"
   delegate_to: localhost
-  when: build_and_send_images_from_localhost and false
+  when: build_and_send_images_from_localhost
 
 - name: Create neurone-images folder on localhost so that send to remote server
   ansible.builtin.file:
@@ -62,15 +61,6 @@
     state: directory
   delegate_to: localhost
   when: build_and_send_images_from_localhost
-
-# - name: Save images on tar files
-#   become: true
-#   community.docker.docker_image:
-#     name: dgacitua/neurone
-#     tag: latest
-#     archive_path: "{{ local_home }}{{ neurone_repository_localhost_path }}/neurone-images/neurone-image.tar"
-#     source: local
-#   when: build_and_send_images_from_localhost and false
 
 - name: Save images on tar files
   ignore_errors: true
@@ -88,10 +78,13 @@
     src: "{{ local_home }}{{ neurone_repository_localhost_path }}/neurone-images"
     dest: "{{ ansible_env.HOME }}"
   when: build_and_send_images_from_localhost
-
-
 ##################################################################################################################
 
+
+
+
+
+#Server Instrucctions
 - name: Clone or update neurone core repository
   ansible.builtin.git:
     repo: "{{ neurone_repository }}"
@@ -128,32 +121,12 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    # recurse: true 
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
   loop:
-    - { path: "{{ ansible_env.HOME }}/neuroneAssets" }
-    - { path: "{{ ansible_env.HOME }}/neuroneDatabase" }
-
-- name: Create Neurone Index directory
-  become: true
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/neuroneIndex"
-    state: directory
-    owner: "8983"
-    group: "8983"
-
-# - name: Create Neurone directories
-#   become: true
-#   ansible.builtin.file:
-#     path: "{{ item.path }}"
-#     state: directory
-#     owner: "{{ item.owner }}"
-#     group: "{{ item.group }}"
-#     mode: "{{ item.mode }}"
-#     recurse: true 
-#   loop:
-#     - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
-#     - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "{{ ansible_user }}", group: "{{ ansible_user }}", mode: "0755" }
-#     - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983", mode: "0755" }
+    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}" }
+    - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "root", group: "root" }
+    - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983" }
 
 - name: Build NEURONE-Core with script neurone-build.sh
   ignore_errors: true
@@ -163,6 +136,7 @@
     chdir: "{{ neurone_directory }}"
     executable: /bin/bash
   register: build_result
+  when: build_neurone_core_on_server
   
 - name: Build NEURONE-Core images with Docker Compose
   ignore_errors: true
@@ -171,7 +145,7 @@
   args:
     # executable: /bin/bash
     chdir: "{{ neurone_directory }}"
-  when: build_result.rc != 0 #activate if flag build_neurone_core_on_server and if task "Run neurone-build.sh" is finished with error
+  when: build_neurone_core_on_server and build_result.rc != 0 #activate if flag build_neurone_core_on_server and if task "Run neurone-build.sh" is finished with error
   
 - name: Start NEURONE-Core with Docker Compose
   ansible.builtin.shell:
@@ -181,7 +155,6 @@
       source {{ neurone_directory }}/dotenv
       set +o allexport
       docker compose -p neurone up -d
-  become: true
   args:
     executable: /bin/bash
     chdir: "{{ neurone_directory }}"
