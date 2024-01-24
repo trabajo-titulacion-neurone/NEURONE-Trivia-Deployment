@@ -60,19 +60,24 @@
     path: "{{ ansible_env.HOME }}{{ trivia_client_directory }}"
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
     
-# - name: Check if the public folder exists or was sent by localhost or Github Actions
-#   ansible.builtin.stat:
-#     path: "{{ directory_of_build_of_trivia_sent }}"
-#   register: public_folder
-    
-- name: Load build of Trivia sent by localhost or Github Actions
+- name: Check if the public folder exists or was sent by Github Actions
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}{{ directory_of_build_of_trivia_sent }}"
+  register: public_folder
+
+- name: Load build of Trivia sent by Github Actions
   become: true
   ansible.posix.synchronize:
-    src: "{{ trivia_server_directory }}/public"
+    src: "{{ ansible_env.HOME }}/build-trivia-frontend/public"
     dest: "{{ ansible_env.HOME }}{{ trivia_server_directory }}"
   delegate_to: "{{ inventory_hostname }}"
+  when: public_folder.stat.isdir is defined and public_folder.stat.isdir and build_and_send_trivia_frontend_from_localhost == false
+    
+- name: Synchronize build of Trivia from localhost where playbook runs
+  ansible.posix.synchronize:
+    src: "{{ local_home }}{{ trivia_server_directory }}/public"
+    dest: "{{ ansible_env.HOME }}{{ trivia_server_directory }}"
   when: build_and_send_trivia_frontend_from_localhost
-  # when: public_folder.stat.isdir is defined and public_folder.stat.isdir
 
 - name: Build Trivia frontend on remote server
   become: true

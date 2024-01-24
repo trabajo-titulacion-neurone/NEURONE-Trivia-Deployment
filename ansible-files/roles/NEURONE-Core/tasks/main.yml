@@ -32,28 +32,85 @@
 # ############### Build NEURONE-Core on localhost and send to remote server #######################################
 
 - name: Get the home directory of the user running the playbook on the control machine
-  become: true
   ansible.builtin.set_fact:
     local_home: "{{ lookup('env', 'HOME') }}"
   delegate_to: localhost
   when: build_and_send_images_from_localhost
 
+- name: Get local user
+  ansible.builtin.set_fact:
+    local_user: "{{ lookup('env', 'USER') }}"
+  delegate_to: localhost
+  when: build_and_send_images_from_localhost
+
+
 - name: Clone or update neurone core repository on localhost
   ansible.builtin.git:
     repo: "{{ neurone_repository }}"
-    dest: "{{ local_home }}{{ neurone_directory: }}"
+    dest: "{{ local_home }}{{ neurone_directory }}"
     clone: yes
     update: yes
     force: yes
   delegate_to: localhost 
   when: build_and_send_images_from_localhost
 
-- name: Build neurone core on localhost
-  ansible.builtin.shell: "./neurone-build.sh"
+# - name: Build neurone core on localhost with script
+#   ignore_errors: true
+#   become: true
+#   ansible.builtin.shell: "./neurone-build.sh"
+#   args:
+#     chdir: "{{ local_home }}{{ neurone_directory }}"
+#   register: build_local_result
+#   delegate_to: localhost
+#   when: build_and_send_images_from_localhost
+
+- name: Create Neurone directories on localhost
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+  loop:
+    - { path: "{{ local_home }}/neuroneAssets", owner: "{{ local_user }}", group: "{{ local_user }}" }
+    - { path: "{{ local_home }}/neuroneDatabase", owner: "root", group: "root" }
+    - { path: "{{ local_home }}/neuroneIndex", owner: "8983", group: "8983" }
+  delegate_to: localhost
+  when: build_and_send_images_from_localhost 
+
+# - name: Build NEURONE-Core images with Docker Compose on localhost
+#   ansible.builtin.shell: docker-compose -p neurone build 
+#   become: true
+#   args:
+#     chdir: "{{ local_home }}{{ neurone_directory }}"
+#   delegate_to: localhost
+#   when: build_and_send_images_from_localhost and build_local_result.rc != 0 #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
+
+
+- name: Build NEURONE-Core images with Docker Compose on localhost
+  ansible.builtin.shell: 
+    cmd: |
+      set -o allexport
+      source ./dotenv
+      set +o allexport
+      docker compose -p neurone build
+  become: true
   args:
     chdir: "{{ local_home }}{{ neurone_directory }}"
   delegate_to: localhost
-  when: build_and_send_images_from_localhost
+  when: build_and_send_images_from_localhost and false #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
+
+
+
+
+
+
+
+
+
+
+
+
 
 - name: Create neurone-images folder on localhost so that send to remote server
   ansible.builtin.file:
@@ -78,7 +135,7 @@
     src: "{{ local_home }}{{ neurone_directory }}/neurone-images"
     dest: "{{ ansible_env.HOME }}"
   when: build_and_send_images_from_localhost
-##################################################################################################################
+#################################################################################################################
 
 
 #Server Instrucctions
@@ -113,18 +170,6 @@
     force_source: true
     force_tag: true
 
-- name: Build NEURONE-Core with script neurone-build.sh
-  ignore_errors: true
-  become: true
-  ansible.builtin.shell: ./neurone-build.sh
-  args:
-    chdir: "{{ ansible_env.HOME }}{{ neurone_directory }}"
-    executable: /bin/bash
-  register: build_result
-  when: build_neurone_core_on_server
-  async: 2100  # 35 minutes in seconds
-  poll: 0 
-
 - name: Create Neurone directories
   become: true
   ansible.builtin.file:
@@ -136,28 +181,32 @@
     - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}" }
     - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "root", group: "root" }
     - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983" }
-  when: build_result.rc != 0
+  
   
 - name: Build NEURONE-Core images with Docker Compose
   ignore_errors: true
   ansible.builtin.shell: docker-compose -p neurone build 
   become: true
+  async: 2100  # 35 minutes in seconds
+  poll: 0  # No polling, check status separately
   register: build_docker_result
   args:
     # executable: /bin/bash
     chdir: "{{ ansible_env.HOME }}{{ neurone_directory }}"
-  when: build_neurone_core_on_server and build_result.rc != 0 #activate if flag build_neurone_core_on_server and if task "Run neurone-build.sh" is finished with error
+  when: build_neurone_core_on_server  #activate if flag build_neurone_core_on_server
 
 - name: Wait for the build to finish
+  become: true
   ansible.builtin.async_status:
-    jid: "{{ build_docker_result.ansible_job_id }}"
+    jid: "{{ build_docker_result.ansible_job_id }}"  
   register: job_result
   until: job_result.finished
   retries: 35
   delay: 60  # Retry every 60 seconds
-  when: build_result.rc != 0 and build_neurone_core_on_server
+  when: build_neurone_core_on_server
 
 - name: Start NEURONE-Core with Docker Compose
+  become: true
   ansible.builtin.shell:
   #docker compose -p neurone up --force-recreate -d
     cmd: |

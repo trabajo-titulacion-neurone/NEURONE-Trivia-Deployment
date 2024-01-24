@@ -1,13 +1,6 @@
 ---
 # tasks file for neurone-gm
 
-
-# - name: Node version being used is loaded to link it with nvm
-#   ansible.builtin.include_vars:
-#     file: roles/node-with-nvm/defaults/main.yml
-#     name: node_vars
-
-
 - name: Get Node.js version
   ansible.builtin.command: "node --version"
   register: node_version
@@ -16,14 +9,14 @@
 - name: Clone or update neurone-gm repository
   git:
     repo: "{{ neuronegm_repository }}"
-    dest: "{{ neuronegm_directory }}"
+    dest: "{{ ansible_env.HOME }}{{ neuronegm_directory }}"
     clone: yes
     force: yes
     update: yes
 
 - name: Install dependencies.
   community.general.npm:
-    path: "{{ neuronegm_server_directory }}"
+    path: "{{ ansible_env.HOME }}{{ neuronegm_server_directory }}"
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
 
 #Saved processes are restored in case of a server reboot
@@ -42,13 +35,13 @@
 - name: Execute the PM2 command (restart) if the process is running
   ansible.builtin.command: pm2 restart {{ neuronegm_server_pm2_process_name }}
   args:
-    chdir: "{{ neuronegm_server_directory }}"
+    chdir: "{{ ansible_env.HOME }}{{ neuronegm_server_directory }}"
   when: running_process
 
 - name: Execute the PM2 command (start) if the process is not running or not created
   ansible.builtin.command: pm2 start app.js --name {{ neuronegm_server_pm2_process_name }}
   args:
-    chdir: "{{ neuronegm_server_directory }}"
+    chdir: "{{ ansible_env.HOME }}{{ neuronegm_server_directory }}"
   when: not running_process
 
 # Save current process list
