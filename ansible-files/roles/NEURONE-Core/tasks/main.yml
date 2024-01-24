@@ -78,27 +78,27 @@
   delegate_to: localhost
   when: build_and_send_images_from_localhost 
 
-# - name: Build NEURONE-Core images with Docker Compose on localhost
-#   ansible.builtin.shell: docker-compose -p neurone build 
-#   become: true
-#   args:
-#     chdir: "{{ local_home }}{{ neurone_directory }}"
-#   delegate_to: localhost
-#   when: build_and_send_images_from_localhost and build_local_result.rc != 0 #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
-
-
 - name: Build NEURONE-Core images with Docker Compose on localhost
-  ansible.builtin.shell: 
-    cmd: |
-      set -o allexport
-      source ./dotenv
-      set +o allexport
-      docker compose -p neurone build
+  ansible.builtin.shell: docker-compose -p neurone build 
   become: true
   args:
     chdir: "{{ local_home }}{{ neurone_directory }}"
   delegate_to: localhost
   when: build_and_send_images_from_localhost #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
+
+
+# - name: Build NEURONE-Core images with Docker Compose on localhost
+#   ansible.builtin.shell: 
+#     cmd: |
+#       set -o allexport
+#       source ./dotenv
+#       set +o allexport
+#       docker compose -p neurone build
+#   become: true
+#   args:
+#     chdir: "{{ local_home }}{{ neurone_directory }}"
+#   delegate_to: localhost
+#   when: build_and_send_images_from_localhost #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
 
 - name: Create neurone-images folder on localhost so that send to remote server
   ansible.builtin.file:
