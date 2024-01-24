@@ -100,18 +100,6 @@
   delegate_to: localhost
   when: build_and_send_images_from_localhost and false #activate if flag build_and_send_images_from_localhost and if task "Build neurone core on localhost with script" is finished with error
 
-
-
-
-
-
-
-
-
-
-
-
-
 - name: Create neurone-images folder on localhost so that send to remote server
   ansible.builtin.file:
     path: "{{ local_home }}{{ neurone_directory }}/neurone-images"
@@ -120,6 +108,7 @@
   when: build_and_send_images_from_localhost
 
 - name: Save images on tar files
+  become: true
   ignore_errors: true
   ansible.builtin.shell: |
     docker save -o mongo.tar dgacitua/mongo
