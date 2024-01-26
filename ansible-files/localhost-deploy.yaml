@@ -38,7 +38,6 @@
         neurone_core_images_path: "/neurone-images",
         build_neurone_core_on_server: true,
         build_and_send_images_from_localhost: false
-        # neurone_repository_localhost_path: "/ansible-workspace/neurone-master"
       }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
@@ -59,14 +58,20 @@
         trivia_server_pm2_process_name: "Trivia-Server",
         build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
-        # trivia_localhost_path: "/ansible-workspace/GAME", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
 
-    # # Basic installation of Nginx
-    # - {role: nginx}
+    # Basic installation of Nginx
+    - {role: nginx,
+        http_connection: true,
+        http_config_file: "{{ role_path }}/templates/game_http.conf",
+        https_connection: false,
+        https_config_file: "{{ role_path }}/templates/game_https.conf",
+        domain_name: "neurone-trivia.lat",
+        email: "gerardoluceroc@gmail.com"
+    }
 
-    # # Firewall
-    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+    # Firewall
+    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 

@@ -62,7 +62,18 @@
       }
 
     # Basic installation of Nginx
-    - {role: nginx}
+    - {role: nginx,
+        http_connection: true,
+        http_config_file: "{{ role_path }}/templates/game_http.conf",
+        https_connection: false,
+        https_config_file: "{{ role_path }}/templates/game_https.conf",
+        domain_name: "neurone-trivia.lat",
+        email: "gerardoluceroc@gmail.com"
+    }
 
     # Firewall
     - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+
+  tasks:
+
+    

@@ -7,11 +7,48 @@
     name: nginx
     state: latest
 
+########## HTTP CONNECTION ####################################################################
+- name: Copy Nginx HTTP configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ http_config_file }}"
+    dest: /etc/nginx/sites-available/game_http.conf
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"     
+    # mode: 0644
+  when: not https_connection and http_connection
+  notify:
+    - Reload Nginx
+
+- name: Desactivate another configurations
+  become: true
+  ignore_errors: true
+  ansible.builtin.shell: rm /etc/nginx/sites-enabled/{{ item }}
+  loop: 
+    - default
+    - game_https.conf
+  when: not https_connection and http_connection
+  notify:
+  - Reload Nginx
+
+- name: Activate HTTP Game config
+  become: true
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_http.conf /etc/nginx/sites-enabled/
+  when: not https_connection and http_connection
+  notify:
+  - Reload Nginx
+
+#################################################################################################
+
+
+
+############# HTTPS CONNECTION ##################################################################
 - name: Install core snap
   become: true
   community.general.snap:
     name: core
     state: present
+  when: https_connection and domain_name is defined and email is defined
 
 - name: Install certbot snap
   become: true
@@ -19,38 +56,48 @@
     name: certbot
     classic: true
     state: present
+  when: https_connection and domain_name is defined and email is defined
 
 - name:  Link the certbot command from the snap install directory 
   become: true
   ansible.builtin.shell: ln -sf /snap/bin/certbot /usr/bin/certbot
+  when: https_connection and domain_name is defined and email is defined
 
 - name: Get SSL/TLS certificate with Certbot
   become: true
-  ansible.builtin.shell: certbot --nginx -d neurone-trivia.lat -d www.neurone-trivia.lat --agree-tos --non-interactive --email gerardoluceroc@gmail.com
+  ansible.builtin.shell: certbot --nginx -d {{ domain_name }} -d www.{{ domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: https_connection and domain_name is defined and email is defined
 
-- name: Copy Nginx configuration file
+- name: Copy Nginx HTTPS configuration file
   become: true
   ansible.builtin.copy:
-    src: "{{ role_path }}/templates/game_https.conf"
+    src: "{{ https_config_file }}"
     dest: /etc/nginx/sites-available/game_https.conf
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"     
-    mode: 0644
+  when: https_connection and domain_name is defined and email is defined
   notify:
     - Reload Nginx
 
-- name: Activate Game config
+- name: Desactivate another configurations
   become: true
-  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_https.conf /etc/nginx/sites-enabled/
+  ignore_errors: true
+  ansible.builtin.shell: rm /etc/nginx/sites-enabled/{{ item }}
+  loop: 
+    - default
+    - game_http.conf
+  when: https_connection and domain_name is defined and email is defined
   notify:
   - Reload Nginx
 
-- name: Desactivate default config
+- name: Activate HTTPS Game config
   become: true
-  ignore_errors: true
-  ansible.builtin.shell: rm /etc/nginx/sites-enabled/default
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_https.conf /etc/nginx/sites-enabled/
+  when: https_connection and domain_name is defined and email is defined
   notify:
   - Reload Nginx
+
+##################################################################################################
 
 - name: start nginx
   ignore_errors: true
