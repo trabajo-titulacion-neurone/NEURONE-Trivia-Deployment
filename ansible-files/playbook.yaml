@@ -63,8 +63,8 @@
         # trivia_localhost_path: "/ansible-workspace/GAME", #Path where Trivia folder is located on localhost to build the application from the local machine where playbook runs
       }
 
-    # # Basic installation of Nginx
-    # - {role: nginx}
+    # Basic installation of Nginx
+    - {role: nginx}
 
     # # Firewall
     # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }

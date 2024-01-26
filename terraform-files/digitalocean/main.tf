@@ -30,7 +30,7 @@ resource "digitalocean_droplet" "my_droplet" {
 
 # resource "digitalocean_droplet" "my_droplet_2" {
 #   image  = var.droplet_image
-#   name   = "trivia-neurone-server-local-deploy"
+#   name   = "trivia-neurone-server-actions"
 #   region = var.droplet_region
 #   size   = var.droplet_size
 #   # ssh_keys = [digitalocean_ssh_key.local_public_key.fingerprint]

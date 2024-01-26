@@ -7,30 +7,39 @@
     name: nginx
     state: latest
 
+- name: Install core snap
+  community.general.snap:
+    name: core
+    state: present
+
+- name: Install certbot snap
+  community.general.snap:
+    name: certbot
+    classic: true
+    state: present
+
+- name:  Link the certbot command from the snap install directory 
+  become: true
+  ansible.builtin.shell: ln -sf /snap/bin/certbot /usr/bin/certbot
+
+- name: Get SSL/TLS certificate with Certbot
+  become: true
+  ansible.builtin.shell: certbot --nginx -d neurone-trivia.lat -d www.neurone-trivia.lat --agree-tos --non-interactive --email gerardoluceroc@gmail.com
+
 - name: Copy Nginx configuration file
   become: true
   ansible.builtin.copy:
-    src: "{{ role_path }}/templates/game_http.conf"
-    dest: /etc/nginx/sites-available/game_http.conf
+    src: "{{ role_path }}/templates/game_https.conf"
+    dest: /etc/nginx/sites-available/game_https.conf
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"     
     mode: 0644
   notify:
     - Reload Nginx
 
-# - name: Activate Game config
-#   ansible.builtin.file:
-#     src: /etc/nginx/sites-available/game_http.conf
-#     dest: /etc/nginx/sites-enabled/
-#     owner: "{{ ansible_user }}"
-#     group: "{{ ansible_user }}"
-#     state: link
-#   notify:
-#   - Reload Nginx
-
 - name: Activate Game config
   become: true
-  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_http.conf /etc/nginx/sites-enabled/
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_https.conf /etc/nginx/sites-enabled/
   notify:
   - Reload Nginx
 
