@@ -35,7 +35,7 @@
 
 - name: Install PM2 packages
   become: true
-  npm:
+  community.general.npm:
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/npm"
     name: pm2
     global: yes
@@ -58,5 +58,9 @@
 - name: Activate Angular with a symbolic link
   become: true
   shell: ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/ng /usr/bin/ng
+
+- name: Activate npm with a symbolic link
+  become: true
+  shell: ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/npm /usr/bin/npm
 
   ######################################################################################################################################
