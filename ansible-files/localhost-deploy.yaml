@@ -7,17 +7,17 @@
 
   roles:
 
-    # Package update and upgrade
-    - {role: update-upgrade-packages}
+    # # Package update and upgrade
+    # - {role: update-upgrade-packages}
 
-    # Docker Installation
-    - {role: docker-installation}
+    # # Docker Installation
+    # - {role: docker-installation}
 
-    # A swap space (4GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 4G}  
+    # # A swap space (4GB) is created if it does not exist
+    # - {role: add-swap-space, swap_space: 4G}  
 
-    # Installation of NodeJS and global packages using Node Version Manager (NVM)
-    - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
+    # # Installation of NodeJS and global packages using Node Version Manager (NVM)
+    # - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
 
     # Installation of MongoDB and configuration of users
     - {role: mongodb}
@@ -31,20 +31,22 @@
       }
 
 
-    # Installation of NEURONE-Core
-    - {role: NEURONE-Core, 
-        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-        neurone_directory: "/apps/neurone-master",
-        neurone_core_images_path: "/neurone-images",
-        build_neurone_core_on_server: true,
-        build_and_send_images_from_localhost: false
-      }  
+    # # Installation of NEURONE-Core
+    # - {role: NEURONE-Core, 
+    #     neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+    #     neurone_directory: "/apps/neurone-master",
+    #     neurone_core_images_path: "/neurone-images",
+    #     build_neurone_core_on_server: true,
+    #     build_and_send_images_from_localhost: false
+    #   }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
         neuronegm_directory: "/apps/NEURONE-GM", 
         neuronegm_server_directory: "/apps/NEURONE-GM/Server", 
+        neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
+        neuronegm_server_config_file_remote_server: "/apps/NEURONE-GM/Server/config/config.js",
         neuronegm_server_pm2_process_name: "Neuronegm-Server"
       }
 
@@ -67,15 +69,15 @@
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }
 
-    # Basic installation of Nginx
-    - {role: nginx,
-        http_connection: true,
-        http_config_file: "{{ role_path }}/templates/game_http.conf",
-        https_connection: false,
-        https_config_file: "{{ role_path }}/templates/game_https.conf",
-        domain_name: "neurone-trivia.lat",
-        email: "gerardoluceroc@gmail.com"
-    }
+    # # Basic installation of Nginx
+    # - {role: nginx,
+    #     http_connection: true,
+    #     http_config_file: "{{ role_path }}/templates/game_http.conf",
+    #     https_connection: false,
+    #     https_config_file: "{{ role_path }}/templates/game_https.conf",
+    #     domain_name: "neurone-trivia.lat",
+    #     email: "gerardoluceroc@gmail.com"
+    # }
 
   tasks:
 

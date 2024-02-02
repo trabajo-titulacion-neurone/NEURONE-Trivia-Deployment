@@ -140,3 +140,4 @@
 # Save current process list
 - name: pm2 save
   ansible.builtin.command: pm2 save
+

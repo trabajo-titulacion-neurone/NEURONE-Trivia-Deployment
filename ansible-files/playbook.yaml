@@ -32,24 +32,26 @@
       }
 
 
-    # Installation of NEURONE-Core
-    - {role: NEURONE-Core, 
-        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-        neurone_directory: "/apps/neurone-master",
-        neurone_core_images_path: "/neurone-images",
-        build_neurone_core_on_server: true,
-        build_and_send_images_from_localhost: false
-      }  
+    # # Installation of NEURONE-Core
+    # - {role: NEURONE-Core, 
+    #     neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+    #     neurone_directory: "/apps/neurone-master",
+    #     neurone_core_images_path: "/neurone-images",
+    #     build_neurone_core_on_server: true,
+    #     build_and_send_images_from_localhost: false
+    #   }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
         neuronegm_directory: "/apps/NEURONE-GM", 
         neuronegm_server_directory: "/apps/NEURONE-GM/Server", 
+        neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
+        neuronegm_server_config_file_remote_server: "/apps/NEURONE-GM/Server/config/config.js",
         neuronegm_server_pm2_process_name: "Neuronegm-Server"
       }
 
-    # Installation of Trivia Server using pm2 and Trivia Client using Angular
+    Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
         # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
         trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
@@ -78,9 +80,27 @@
         email: "gerardoluceroc@gmail.com"
     }
 
-    # Firewall
-    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+  #   # # Firewall
+  #   # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 
-    
+    # - name: Register a user in neuronegame database (Optional)
+    #   ansible.builtin.uri:
+    #     url: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}/api/auth/register" #Customize your server address
+    #     method: POST
+    #     body_format: json
+    #     body:
+    #       names: "Admin"
+    #       last_names: "Ejemplo"
+    #       email: "admin@admin.com"
+    #       password: "clave321."
+    #       repeat_password: "clave321."
+    #     headers:
+    #       Content-Type: "application/json"
+    #   register: response
+
+    # - name: Display response
+    #   debug:
+    #     var: response
+

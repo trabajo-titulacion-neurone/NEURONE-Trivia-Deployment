@@ -1,7 +1,8 @@
 ---
 - name: Update apt cache
+  ignore_errors: true
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
 
 - name: Check Ubuntu version
@@ -16,26 +17,26 @@
 - name: Add focal-security repository
   become: true
   shell: echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list
-  when: ubuntu_version.stdout == "22.04" and not focal_security_repo.stat.exists
+  when:  not focal_security_repo.stat.exists
 
 - name: Update apt cache
+  ignore_errors: true
   become: true
   apt:
     update_cache: yes
-  when: ubuntu_version.stdout == "22.04"
 
 - name: Install libssl1.1
   become: true
-  apt:
+  ansible.builtin.apt:
     name: libssl1.1
     state: present
-  when: ubuntu_version.stdout == "22.04"
+  # when: ubuntu_version.stdout == "22.04"
 
 - name: Installing dependencies
   package:
     name: "{{ item }}"
     state: present
-    update_cache: yes
+    # update_cache: yes
   loop:
     - curl
     - gnupg
@@ -71,6 +72,7 @@
   when: not mongo_repository_exists.stat.exists
 
 - name: Update apt cache
+  ignore_errors: true
   become: true
   apt:
     update_cache: yes

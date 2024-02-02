@@ -81,25 +81,25 @@
     src: "{{ trivia_client_environment_prod_file_localhost }}"
     dest: "{{ ansible_env.HOME }}{{ trivia_client_environment_prod_file_remote_server }}"
 
-- name: Build Trivia frontend on remote server
-  # become: true
-  ansible.builtin.command: ng build --prod --output-path ../Server/public
-  async: 2100  # 35 minutes in seconds
-  poll: 0  # No polling, check status separately
-  register: build_result
-  args:
-    chdir: "{{ ansible_env.HOME }}{{ trivia_client_directory }}"
-  when: build_trivia_frontend_on_server
+# - name: Build Trivia frontend on remote server
+#   # become: true
+#   ansible.builtin.command: ng build --prod --output-path ../Server/public
+#   async: 2100  # 35 minutes in seconds
+#   poll: 0  # No polling, check status separately
+#   register: build_result
+#   args:
+#     chdir: "{{ ansible_env.HOME }}{{ trivia_client_directory }}"
+#   when: build_trivia_frontend_on_server
 
-- name: Wait for the build to finish
-  # become: true
-  ansible.builtin.async_status:
-    jid: "{{ build_result.ansible_job_id }}"  
-  register: job_result
-  until: job_result.finished
-  retries: 35
-  delay: 60  # Retry every 60 seconds
-  when: build_trivia_frontend_on_server
+# - name: Wait for the build to finish
+#   # become: true
+#   ansible.builtin.async_status:
+#     jid: "{{ build_result.ansible_job_id }}"  
+#   register: job_result
+#   until: job_result.finished
+#   retries: 35
+#   delay: 60  # Retry every 60 seconds
+#   when: build_trivia_frontend_on_server
 
 - name: Install trivia-server dependencies
   community.general.npm:

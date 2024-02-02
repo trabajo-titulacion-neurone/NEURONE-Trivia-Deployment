@@ -63,11 +63,6 @@
   ansible.builtin.shell: ln -sf /snap/bin/certbot /usr/bin/certbot
   when: https_connection and domain_name is defined and email is defined
 
-- name: Get SSL/TLS certificate with Certbot
-  become: true
-  ansible.builtin.shell: certbot --nginx -d {{ domain_name }} -d www.{{ domain_name }} --agree-tos --non-interactive --email {{ email }}
-  when: https_connection and domain_name is defined and email is defined
-
 - name: Copy Nginx HTTPS configuration file
   become: true
   ansible.builtin.copy:
@@ -79,6 +74,11 @@
   notify:
     - Reload Nginx
 
+- name: Get SSL/TLS certificate with Certbot
+  become: true
+  ansible.builtin.shell: certbot --nginx -d {{ domain_name }} -d www.{{ domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: https_connection and domain_name is defined and email is defined
+  
 - name: Desactivate another configurations
   become: true
   ignore_errors: true
@@ -105,3 +105,10 @@
   ansible.builtin.service:
     name: nginx
     state: started
+
+- name: restart nginx
+  ignore_errors: true
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

@@ -14,10 +14,15 @@
     force: yes
     update: yes
 
-- name: Install dependencies.
+- name: Install dependencies
   community.general.npm:
     path: "{{ ansible_env.HOME }}{{ neuronegm_server_directory }}"
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version.stdout }}/bin/npm"
+
+- name: Synchronize config.js of neurone-gm from localhost where playbook runs
+  ansible.posix.synchronize:
+    src: "{{ neuronegm_server_config_file_localhost }}"
+    dest: "{{ ansible_env.HOME }}{{ neuronegm_server_config_file_remote_server }}"
 
 #Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
