@@ -1,3 +1,5 @@
+#RUN: ansible-playbook -i inventory.yaml playbook.yaml -K
+
 - hosts: webservers
   serial: 1 # Number of hosts simultaneously executing the playbook
 
@@ -32,14 +34,14 @@
       }
 
 
-    # # Installation of NEURONE-Core
-    # - {role: NEURONE-Core, 
-    #     neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-    #     neurone_directory: "/apps/neurone-master",
-    #     neurone_core_images_path: "/neurone-images",
-    #     build_neurone_core_on_server: true,
-    #     build_and_send_images_from_localhost: false
-    #   }  
+    # Installation of NEURONE-Core
+    - {role: NEURONE-Core, 
+        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
+        neurone_directory: "/apps/neurone-master",
+        neurone_core_images_path: "/neurone-images",
+        build_neurone_core_on_server: true,
+        build_and_send_images_from_localhost: false
+      }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
@@ -51,7 +53,7 @@
         neuronegm_server_pm2_process_name: "Neuronegm-Server"
       }
 
-    Installation of Trivia Server using pm2 and Trivia Client using Angular
+    # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME, 
         # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
         trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
@@ -87,7 +89,7 @@
 
     # - name: Register a user in neuronegame database (Optional)
     #   ansible.builtin.uri:
-    #     url: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}/api/auth/register" #Customize your server address
+    #     url: "https://neurone-trivia.lat/api/auth/register" #Customize your server address
     #     method: POST
     #     body_format: json
     #     body:
@@ -104,3 +106,29 @@
     #   debug:
     #     var: response
 
+
+
+
+
+
+
+
+# curl --location 'http://142.93.200.53:3030/api/auth/register' \
+# --header 'Content-Type: application/json' \
+# --data-raw '{
+#     "names": "Admin",
+#     "last_names": "Ejemplo",
+#     "email": "admin@admin.com",
+#     "password": "clave321.",
+#     "repeat_password": "clave321."
+# }'
+
+
+#"https://{{ hostvars[inventory_hostname]['ansible_host'] }}/api/auth/register"
+
+# db.getCollection('users').find({})
+
+# db.getCollection('users').updateOne(
+#    { email: 'admin@admin.com' }, // Filtro para seleccionar el documento
+#    { $set: { confirmed: true } } // Actualización del valor del atributo
+# )

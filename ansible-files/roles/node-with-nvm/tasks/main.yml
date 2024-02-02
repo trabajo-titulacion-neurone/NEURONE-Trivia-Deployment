@@ -46,7 +46,7 @@
   become: true
   shell: ln -sf {{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/pm2 /usr/bin/pm2
 
-- name: Install Angular packagess
+- name: Install Angular packages
   become: true
   community.general.npm:
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ node_version }}/bin/npm"
