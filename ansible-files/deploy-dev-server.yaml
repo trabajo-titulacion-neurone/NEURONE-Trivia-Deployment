@@ -1,4 +1,4 @@
-#RUN: ansible-playbook -i inventory.yaml playbook.yaml -K
+#RUN: ansible-playbook deploy-dev-server.yaml -i inventory.yaml -K
 
 - hosts: webservers
   serial: 1 # Number of hosts simultaneously executing the playbook
@@ -25,42 +25,26 @@
     # Installation of MongoDB and configuration of users
     - {role: mongodb}
 
-    - {role: mongodb_users, 
-        admin_database: "admin", 
-        mongodb_root_user: "root", 
-        mongodb_root_password: "root123", 
-        mongodb_admin_user: "neuroneAdmin", 
-        mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
-      }
+    - {role: mongodb_users}
 
-    # Installation of NEURONE-Core
-    - {role: NEURONE-Core, 
-        build_neurone_core_on_server: true,
-        build_and_send_images_from_localhost: false
-      }  
+    # # Installation of NEURONE-Core
+    # - {role: NEURONE-Core, 
+    #     build_neurone_core_on_server: true,
+    #     build_and_send_images_from_localhost: false
+    #   }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
+        # neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git",
         neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
         neuronegm_server_config_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/config/config.js",
       }
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
-    - {role: GAME, 
+    - {role: GAME-production, 
         # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
         trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
-        trivia_directory: "/apps/GAME", 
-        trivia_server_directory: "/apps/GAME/Server", 
-        trivia_client_directory: "/apps/GAME/Client", 
-        trivia_server_config_file_localhost: "{{ role_path }}/files/config.js",
-        trivia_server_config_file_remote_server: "/apps/GAME/Server/config/config.js",
-        trivia_client_environment_file_localhost: "{{ role_path }}/files/environment.ts", 
-        trivia_client_environment_file_remote_server: "/apps/GAME/Client/src/environments/environment.ts", 
-        trivia_client_environment_prod_file_localhost: "{{ role_path }}/files/environment.prod.ts",
-        trivia_client_environment_prod_file_remote_server: "/apps/GAME/Client/src/environments/environment.prod.ts",
-        directory_of_build_of_trivia_sent: "/build-trivia-frontend/public", #path of build of Trivia sent by Github Actions to upload to the trivia-server folder
-        trivia_server_pm2_process_name: "Trivia-Server",
         build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }
@@ -68,15 +52,13 @@
     # Basic installation of Nginx
     - {role: nginx,
         http_connection: false,
-        http_config_file: "{{ role_path }}/templates/game_http.conf",
         https_connection: true,
-        https_config_file: "{{ role_path }}/templates/game_https.conf",
         domain_name: "neurone-trivia.lat",
         email: "gerardoluceroc@gmail.com"
     }
 
     # # Firewall
-    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007, 443] }
 
   tasks:
 

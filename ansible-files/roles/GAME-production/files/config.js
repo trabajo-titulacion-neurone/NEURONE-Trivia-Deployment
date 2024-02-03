@@ -24,7 +24,7 @@ process.env.USERURI = `mongodb://localhost:27017/neuronegameuser`;
 //NEURONE GM
 //process.env.NEURONEGM = 'http://159.65.100.191:3080';
 //process.env.NEURONEGM = 'https://trivia.neurone.info:3002';
-process.env.NEURONEGM = 'https://neurone-trivia.lat:3002';
+process.env.NEURONEGM = 'https://neurone-trivia.lat:3007';
 
 //NEURONE GAME CLIENT
 //process.env.GAME_CLIENT = 'http://159.65.100.191:3030';

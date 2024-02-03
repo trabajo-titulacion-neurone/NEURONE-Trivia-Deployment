@@ -1,2 +1,15 @@
 ---
 # defaults file for nginx
+
+#If true, nginx will be configured with the game_http.conf file which sets up a server with an HTTP connection
+http_connection: false
+http_config_file: "{{ role_path }}/templates/game_http.conf"
+
+
+
+
+#If true, nginx will be configured with the game_https.conf file which sets up a server with an HTTPS connection
+https_connection: true
+https_config_file: "{{ role_path }}/templates/game_https.conf"
+domain_name: "neurone-trivia.lat" 
+email: "gerardoluceroc@gmail.com" #Email associated with the declared domain
