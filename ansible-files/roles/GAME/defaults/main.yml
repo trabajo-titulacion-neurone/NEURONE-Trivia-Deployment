@@ -2,20 +2,56 @@
 # defaults file for GAME
 trivia_repository: "https://github.com/NEURONE-IL/GAME.git"
 
-#Path where the Trivia repository will be stored on the server.
-trivia_directory: "~/apps/GAME"
+#Path where the Trivia repository will be stored on the server and the local machine where playbook runs if is necessary
+trivia_directory: "/apps/GAME"
 
-#Path where Trivia folder is located to build the application from the local machine where playbook runs
-trivia_localhost_path: "/home/gerardo/Escritorio/WORKSPACE/trabajo-titulacion-neurone/neurone-trivia"
+#Path where the Trivia Server folder will be stored
+trivia_server_directory: "/apps/GAME/Server"
 
-#Path where the Trivia Server folder will be stored on the server.
-trivia_server_directory: "~/apps/GAME/Server"
-
-#Path where the Trivia Client folder will be stored on the server.
-trivia_client_directory: "~/apps/GAME/Client"
+#Path where the Trivia Client folder will be stored
+trivia_client_directory: "/apps/GAME/Client"
 
 #Name of the pm2 process running Trivia server will have.
 trivia_server_pm2_process_name: "Trivia-Server"
 
-build_trivia_frontend_on_server: false 
+#path of build of Trivia sent by Github Actions to later upload to the trivia-server folder (In case the trivia build was done in GItHub Actions)
+directory_of_build_of_trivia_sent: "/build-trivia-frontend/public"
+
+#Conditional to build the frontend on the destination server or on the machine where the playbook runs in case of a local execution
+build_trivia_frontend_on_server: true
+
+#If true, the frontend will be built on the local machine where the playbook runs to later be sent to the destination server(s)
 build_and_send_trivia_frontend_from_localhost: false
+
+
+
+#Trivia configurations files will be replaced by the ones located inside the role's files directory
+
+#Paths of the files that will be replaced by the file which is in the role
+trivia_server_config_file_localhost: "{{ role_path }}/files/config.js"
+trivia_client_environment_file_localhost: "{{ role_path }}/files/environment.ts"
+trivia_client_environment_prod_file_localhost: "{{ role_path }}/files/environment.prod.ts"
+
+#Path of the file that will be replaced by the file which is in the role's directory
+trivia_server_config_file_remote_server: "/apps/GAME/Server/config/config.js"
+trivia_client_environment_file_remote_server: "/apps/GAME/Client/src/environments/environment.ts"
+trivia_client_environment_prod_file_remote_server: "/apps/GAME/Client/src/environments/environment.prod.ts"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #Path where Trivia folder is located to build the application from the local machine where playbook runs
+# trivia_localhost_path: "/home/gerardo/Escritorio/WORKSPACE/trabajo-titulacion-neurone/neurone-trivia"
+

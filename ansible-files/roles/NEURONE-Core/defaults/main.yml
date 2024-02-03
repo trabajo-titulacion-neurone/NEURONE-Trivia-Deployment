@@ -1,9 +1,22 @@
 ---
 # defaults file for NEURONE-Core
+
 NEURONE_USERNAME: "{{ ansible_user }}"
 NEURONE_USERID: ""
 
+
 neurone_repository: "https://github.com/NEURONE-IL/neurone.git"
-neurone_directory: "{{ ansible_env.HOME }}/apps/neurone-master"
-build_neurone_core_on_server: false
-neurone_core_images_path: "{{ ansible_env.HOME }}/neurone-images"
+
+#Path where the recently cloned or updated neurone repository will be saved
+neurone_directory: "/apps/neurone-master"
+
+#Conditional to build the neurone images on the destination server or on the machine where the playbook runs in case of a local execution
+build_neurone_core_on_server: true
+
+
+#If true, the neurone images will be built on the local machine where the playbook runs to later be sent to the destination server(s)
+build_and_send_images_from_localhost: false
+
+#If the neurone images are built on the local machine where the playbook runs, they will be saved in .tar files in the following path 
+# to later be sent to the destination server, which will be stored in the same path into the server.
+neurone_core_images_path: "/neurone-images"

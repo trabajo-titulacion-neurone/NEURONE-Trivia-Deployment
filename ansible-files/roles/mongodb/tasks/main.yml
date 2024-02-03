@@ -6,23 +6,23 @@
     update_cache: yes
 
 - name: Check Ubuntu version
-  command: lsb_release -rs
+  ansible.builtin.command: lsb_release -rs
   register: ubuntu_version
 
 - name: Check if focal-security repository exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/apt/sources.list.d/focal-security.list
   register: focal_security_repo
 
 - name: Add focal-security repository
   become: true
-  shell: echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list
+  ansible.builtin.shell: echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list
   when:  not focal_security_repo.stat.exists
 
 - name: Update apt cache
   ignore_errors: true
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
 
 - name: Install libssl1.1
@@ -33,7 +33,7 @@
   # when: ubuntu_version.stdout == "22.04"
 
 - name: Installing dependencies
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
     # update_cache: yes
@@ -44,29 +44,29 @@
   become: true 
 
 - name: Install pymongo
-  pip:
+  ansible.builtin.pip:
     name: pymongo
 
 - name: Check if MongoDB APT keyring exists
-  stat:
+  ansible.builtin.stat:
     path: /usr/share/keyrings/mongo-key.gpg
   register: mongo_keyring_exists
 
 - name: Add MongoDB APT keyring
   become: true
-  shell: "curl -fsSL https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc | gpg --dearmour -o /usr/share/keyrings/mongo-key.gpg"
+  ansible.builtin.shell: "curl -fsSL https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc | gpg --dearmour -o /usr/share/keyrings/mongo-key.gpg"
   args:
     executable: /bin/bash
   when: not mongo_keyring_exists.stat.exists
 
 - name: Check if MongoDB repository exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list
   register: mongo_repository_exists
 
 - name: Add MongoDB repository
   become: true
-  shell: sh -c 'echo deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongo-key.gpg] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/{{ mongodb_version }} multiverse > /etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list'
+  ansible.builtin.shell: sh -c 'echo deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongo-key.gpg] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/{{ mongodb_version }} multiverse > /etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list'
   args:
     executable: /bin/bash
   when: not mongo_repository_exists.stat.exists
@@ -74,25 +74,25 @@
 - name: Update apt cache
   ignore_errors: true
   become: true
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
 
 - name: Install MongoDB packages
   become: true
-  apt:
+  ansible.builtin.apt:
     name: mongodb-org
     state: latest
 
 - name: Enable and start MongoDB service
   become: true
-  service:
+  ansible.builtin.service:
     name: mongod
     state: started
     enabled: yes
 
 - name: Enable local connections in MongoDB
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/mongod.conf
     regexp: '^ *bindIp:.*'
     line: '  bindIp: 127.0.0.1' 
@@ -109,7 +109,7 @@
 # Now, with this, it checks if the block has already been written before taking action.
 # - name: Enable authentication in MongoDB
 #   become: true
-#   blockinfile:
+#   ansible.builtin.blockinfile:
 #     path: /etc/mongod.conf
 #     block: |
 #       security:

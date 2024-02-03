@@ -17,7 +17,7 @@
     - {role: reboot-and-wait}
 
     # A swap space (2GB) is created if it does not exist
-    - {role: add-swap-space, swap_space: 2G}  
+    - {role: add-swap-space}  
 
     # Installation of NodeJS and global packages using Node Version Manager (NVM)
     - {role: node-with-nvm, node_version: "10.19.0", angular_version: "9.1.13"}
@@ -33,12 +33,8 @@
         mongodb_admin_password: "DK,V-Dk6-*Pd-PM"
       }
 
-
     # Installation of NEURONE-Core
     - {role: NEURONE-Core, 
-        neurone_repository: "https://github.com/NEURONE-IL/neurone.git", 
-        neurone_directory: "/apps/neurone-master",
-        neurone_core_images_path: "/neurone-images",
         build_neurone_core_on_server: true,
         build_and_send_images_from_localhost: false
       }  
@@ -46,11 +42,8 @@
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
-        neuronegm_directory: "/apps/NEURONE-GM", 
-        neuronegm_server_directory: "/apps/NEURONE-GM/Server", 
         neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
-        neuronegm_server_config_file_remote_server: "/apps/NEURONE-GM/Server/config/config.js",
-        neuronegm_server_pm2_process_name: "Neuronegm-Server"
+        neuronegm_server_config_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/config/config.js",
       }
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
@@ -82,8 +75,8 @@
         email: "gerardoluceroc@gmail.com"
     }
 
-  #   # # Firewall
-  #   # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+    # # Firewall
+    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 

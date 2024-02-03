@@ -1,2 +1,5 @@
 ---
 # defaults file for firewall-with-ufw
+
+#List of ports that will be enabled by the firewall
+allowed_ports: [3005, 3007]
