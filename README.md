@@ -5,7 +5,9 @@ This repository contains files and instructions for the automated deployment of 
 ## Terraform Files
 
 The "terraform-files" folder includes Terraform files and scripts for the automated creation of a DigitalOcean droplet. These files facilitate the necessary infrastructure for deploying NEURONE Trivia.
+
 If you need to create a virtual private server to deploy the system. Access this folder with the following command and follow the instructions inside.
+
 ```bash
 cd terraform-files
 ```
@@ -15,6 +17,7 @@ If you have a server to deploy the system or want to deploy it in a local enviro
 ## Ansible Files
 
 The "ansible-files" folder contains Ansible files and scripts for deploying NEURONE Trivia on a local machine or on a remote server.
+
 To deploy Trivia, access this folder with the following command and follow the instructions inside.
 
 ```bash
