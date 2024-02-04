@@ -1,4 +1,4 @@
-#RUN: ansible-playbook deploy-dev-server.yaml -i inventory.yaml -K
+#RUN: ansible-playbook deploy-prod-server.yaml -i inventory.yaml -K
 
 - hosts: webservers
   serial: 1 # Number of hosts simultaneously executing the playbook
@@ -36,74 +36,26 @@
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
-        neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
-        neuronegm_server_config_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/config/config.js",
+        # neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git",
       }
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME-production, 
         # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
+        trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
         build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }
 
-    # Basic installation of Nginx
+    # Installation of Nginx
     - {role: nginx,
         http_connection: false,
-        http_config_file: "{{ role_path }}/templates/game_http.conf",
         https_connection: true,
-        https_config_file: "{{ role_path }}/templates/game_https.conf",
         domain_name: "neurone-trivia.lat",
         email: "gerardoluceroc@gmail.com"
     }
 
-    # # Firewall
-    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
+    # Firewall
+    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
-
-    # - name: Register a user in neuronegame database (Optional)
-    #   ansible.builtin.uri:
-    #     url: "https://neurone-trivia.lat/api/auth/register" #Customize your server address
-    #     method: POST
-    #     body_format: json
-    #     body:
-    #       names: "Admin"
-    #       last_names: "Ejemplo"
-    #       email: "admin@admin.com"
-    #       password: "clave321."
-    #       repeat_password: "clave321."
-    #     headers:
-    #       Content-Type: "application/json"
-    #   register: response
-
-    # - name: Display response
-    #   debug:
-    #     var: response
-
-
-
-
-
-
-
-
-# curl --location 'http://142.93.200.53:3030/api/auth/register' \
-# --header 'Content-Type: application/json' \
-# --data-raw '{
-#     "names": "Admin",
-#     "last_names": "Ejemplo",
-#     "email": "admin@admin.com",
-#     "password": "clave321.",
-#     "repeat_password": "clave321."
-# }'
-
-
-#"https://{{ hostvars[inventory_hostname]['ansible_host'] }}/api/auth/register"
-
-# db.getCollection('users').find({})
-
-# db.getCollection('users').updateOne(
-#    { email: 'admin@admin.com' }, // Filtro para seleccionar el documento
-#    { $set: { confirmed: true } } // Actualización del valor del atributo
-# )

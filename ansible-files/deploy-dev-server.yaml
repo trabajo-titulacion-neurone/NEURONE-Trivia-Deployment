@@ -27,18 +27,16 @@
 
     - {role: mongodb_users}
 
-    # # Installation of NEURONE-Core
-    # - {role: NEURONE-Core, 
-    #     build_neurone_core_on_server: true,
-    #     build_and_send_images_from_localhost: false
-    #   }  
+    # Installation of NEURONE-Core
+    - {role: NEURONE-Core, 
+        build_neurone_core_on_server: true,
+        build_and_send_images_from_localhost: false
+      }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
     - {role: neurone-gm, 
         neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
         # neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git",
-        neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js",
-        neuronegm_server_config_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/config/config.js",
       }
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
@@ -49,16 +47,14 @@
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }
 
-    # Basic installation of Nginx
+    # Installation of Nginx
     - {role: nginx,
-        http_connection: false,
-        https_connection: true,
-        domain_name: "neurone-trivia.lat",
-        email: "gerardoluceroc@gmail.com"
+        http_connection: true,
+        https_connection: false,
     }
 
-    # # Firewall
-    # - {role: firewall-with-ufw, allowed_ports: [3005, 3007, 443] }
+    # Firewall
+    - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
   tasks:
 

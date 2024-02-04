@@ -36,22 +36,3 @@ trivia_client_environment_prod_file_localhost: "{{ role_path }}/files/environmen
 trivia_server_config_file_remote_server: "/apps/GAME/Server/config/config.js"
 trivia_client_environment_file_remote_server: "/apps/GAME/Client/src/environments/environment.ts"
 trivia_client_environment_prod_file_remote_server: "/apps/GAME/Client/src/environments/environment.prod.ts"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #Path where Trivia folder is located to build the application from the local machine where playbook runs
-# trivia_localhost_path: "/home/gerardo/Escritorio/WORKSPACE/trabajo-titulacion-neurone/neurone-trivia"
-

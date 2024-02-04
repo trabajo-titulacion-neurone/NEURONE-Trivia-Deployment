@@ -1,6 +1,6 @@
 ---
 # defaults file for neurone-gm
-neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git"
+neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git"
 
 
 #Path where the neurone-gm repository will be stored both on the server and on the local machine where the playbook runs in case if is necessary to clone it.
