@@ -1,4 +1,4 @@
-# Trivia deployment using Ansible
+# NEURONE Trivia deployment using Ansible
 This folder contains configuration files to run an Ansible playbook and configure one or multiple servers so that Trivia deployment. The following steps outline the necessary process to execute this playbook.
 
 ## Prerequisites
