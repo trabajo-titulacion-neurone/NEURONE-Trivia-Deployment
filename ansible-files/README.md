@@ -6,6 +6,35 @@ This folder contains configuration files to run an Ansible playbook and configur
 
 * Public SSH Key of Local Host: Ensure that the public SSH key of your local machine is authorized on the server you wish to connect to.
 
+## Resumen
+Este directorio contiene 3 playbooks para desplegar el sistema NEURONE Trivia dependiendo de la necesidad. Estos tipos de despliegues son:
+1. **[Despliegue en maquina local](#despliegue-en-maquina-local):**
+   - En este caso se realiza un despliegue en un entorno local, especificamente en el entorno donde se ejecuta el playbook.
+     
+2. **Despliegue en servidor de desarrollo:**
+   - En este caso se realiza un despliegue en un servidor remoto con un usuario el cual tiene autorización para ejecutar acciones en modo de superusuario en el servidor. Al ser un servidor de desarrollo se monta un servidor de nginx el cual escucha solo solicitudes del tipo HTTP.
+     
+3. **Despliegue en servidor de producción:**
+   - En este caso se realiza un despliegue en un servidor remoto con un usuario el cual tiene autorización para ejecutar acciones en modo de superusuario en el servidor. Al ser un servidor de producción, se monta un servidor de nginx el cual escucha solicitudes del tipo HTTPS y obtiene certificados SSL para el sitio web. Por lo tanto para esto es necesario contar con un dominio registrado y configurado para que apunte hacia el servidor de producción. 
+
+
+## Despliegue en maquina local
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Create User on Server and Enabled Password Authentication
 #### If you already have a username and password enabled to connect to the desired server, you can skip these steps.
 
