@@ -35,7 +35,7 @@ whoami
 
 ## Deployment on a remote server
 To deploy the system in a remote server, es necesario contar con los siguientes requisitos:
-1. **[Have a user with superuser privileges](#Create-user-on-server-and-enabled-password-authentication):**
+1. **[Have a user with superuser privileges](#create-user-on-server-with-superuser-privileges):** Create User on Server with superuser privileges.
 
 2. **[Enable password authentication on the server](#enable-password-authentication):**
 
