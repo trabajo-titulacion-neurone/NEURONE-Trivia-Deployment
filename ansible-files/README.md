@@ -11,10 +11,10 @@ Este directorio contiene 3 playbooks para desplegar el sistema NEURONE Trivia de
 1. **[Local machine deployment](#local-machine-deployment):**
    - En este caso se realiza un despliegue en un entorno local, especificamente en el entorno donde se ejecuta el playbook.
      
-2. **Despliegue en servidor de desarrollo:**
+2. **[Deployment on a development server](#deployment-on-a-development-server):**
    - En este caso se realiza un despliegue en un servidor remoto con un usuario el cual tiene autorización para ejecutar acciones en modo de superusuario en el servidor. Al ser un servidor de desarrollo se monta un servidor de nginx el cual escucha solo solicitudes del tipo HTTP.
      
-3. **Despliegue en servidor de producción:**
+3. **[Deployment on a production server](#deployment-on-a-production-server):**
    - En este caso se realiza un despliegue en un servidor remoto con un usuario el cual tiene autorización para ejecutar acciones en modo de superusuario en el servidor. Al ser un servidor de producción, se monta un servidor de nginx el cual escucha solicitudes del tipo HTTPS y obtiene certificados SSL para el sitio web. Por lo tanto para esto es necesario contar con un dominio registrado y configurado para que apunte hacia el servidor de producción. 
 
 
@@ -30,7 +30,9 @@ Where you should replace <USERNAME> with the name of the operating system user t
 whoami
 ```
 
-## Despliegue en maquina loc
+## Deployment on a development server
+
+## Deployment on a production server
 
 
 
