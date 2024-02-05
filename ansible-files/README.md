@@ -8,7 +8,7 @@ This folder contains configuration files to run an Ansible playbook and configur
 
 ## Resumen
 Este directorio contiene 3 playbooks para desplegar el sistema NEURONE Trivia dependiendo de la necesidad. Estos tipos de despliegues son:
-1. **[Despliegue en maquina local](#despliegue-en-maquina-local):**
+1. **[Local machine deployment](#local-machine-deployment):**
    - En este caso se realiza un despliegue en un entorno local, especificamente en el entorno donde se ejecuta el playbook.
      
 2. **Despliegue en servidor de desarrollo:**
@@ -18,12 +18,19 @@ Este directorio contiene 3 playbooks para desplegar el sistema NEURONE Trivia de
    - En este caso se realiza un despliegue en un servidor remoto con un usuario el cual tiene autorización para ejecutar acciones en modo de superusuario en el servidor. Al ser un servidor de producción, se monta un servidor de nginx el cual escucha solicitudes del tipo HTTPS y obtiene certificados SSL para el sitio web. Por lo tanto para esto es necesario contar con un dominio registrado y configurado para que apunte hacia el servidor de producción. 
 
 
-## Despliegue en maquina local
+## Local machine deployment
+To deploy the system in a local environment, you must do it with a user that has superuser privileges. Then, run the playbook using the following command with the "-K" flag to input the sudo (Become) password via the terminal when prompted:
 
+```bash
+ansible-playbook localhost-deploy.yaml -K --extra-vars "ansible_user=<USERNAME>"
+```
+Where you should replace <USERNAME> with the name of the operating system user that will execute the playbook. You can check your username using the following command if you are on Ubuntu.
 
+```bash
+whoami
+```
 
-
-
+## Despliegue en maquina loc
 
 
 
