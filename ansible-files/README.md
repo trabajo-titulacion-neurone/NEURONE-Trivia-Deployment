@@ -292,7 +292,7 @@ ansible-playbook deploy-prod-server.yaml -i inventory.yaml -K
 
 ## Additional Instrucctions
 
-### Create User on Server with superuser privileges.
+### Create User on Server with superuser privileges
 #### If you already have a username with superuser privileges you can skip these steps. 
 
 You must log in to the server as root and execute the following command. 
