@@ -34,14 +34,14 @@ whoami
 ```
 
 ## Deployment on a remote server
-To deploy the system in a remote server, es necesario contar con los siguientes requisitos:
+To deploy the system on a remote server, you need to meet the following requirements.
 1. **[Have a user with superuser privileges](#create-user-on-server-with-superuser-privileges):**
 
 2. **[Enable password authentication on the server](#enable-password-authentication):**
 
 3. **[Have an SSH key pair authorized by the server](#add-local-SSH-Key-to-authorized-keys-on-server):**
 
-### Configurar archivo de inventario
+### Configure inventory file
 Before executing the playbook, you must configure the inventory file with the necessary data to connect to the server.
 
 Open the inventory.yaml file in a text editor:
