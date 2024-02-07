@@ -292,6 +292,81 @@ ansible-playbook deploy-prod-server.yaml -i inventory.yaml -K
 
 ## Additional Instrucctions
 
+### Create admin user on database
+To access Trivia, you need to have a registered user in the database. If you don't have one, you can create an administrator user as follows.
+
+First, [Install Postman](https://learning.postman.com/docs/getting-started/installation/installation-and-updates/).
+
+```bash
+sudo snap install postman
+```
+and open it to send an HTTP request.
+#### If you have deployed Trivia in your local environment, you should copy the following URL and paste it into Postman.
+```text
+curl --location 'http://localhost/api/auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "names": "Admin",
+    "last_names": "Ejemplo",
+    "email": "admin@admin.com",
+    "password": "clave321.",
+    "repeat_password": "clave321."
+}'
+```
+
+#### If you have deployed Trivia on a remote development server, you should copy the following URL and paste it into Postman.
+```text
+curl --location 'http://IP_ADDRESS_SERVER/api/auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "names": "Admin",
+    "last_names": "Ejemplo",
+    "email": "admin@admin.com",
+    "password": "clave321.",
+    "repeat_password": "clave321."
+}'
+```
+Where you should replace the value of IP_ADDRESS_SERVER with the IP address of the server where Trivia was deployed.
+
+
+#### If you have deployed Trivia on a remote production server, you should copy the following URL and paste it into Postman.
+```text
+curl --location 'https://DOMAIN_NAME/api/auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "names": "Admin",
+    "last_names": "Ejemplo",
+    "email": "admin@admin.com",
+    "password": "clave321.",
+    "repeat_password": "clave321."
+}'
+```
+Where you should replace the value of DOMAIN_NAME with the registered domain name on the server.
+
+This will register the admin user in the database. However, this user is not confirmed yet, so it is not possible to access Trivia. To do this, it is necessary to update the newly created user to have its "confirmed" attribute set to true. To achieve this, access the MongoDB service with the necessary permissions.
+
+```bash
+mongosh
+```
+Next, access the Trivia database.
+
+```bash
+use neuronegame;
+```
+Then, update the value of "confirmed" for the newly created admin user with the following instruction.
+
+```bash
+db.getCollection('users').updateOne(
+   { email: 'admin@admin.com' },
+   { $set: { confirmed: true } }
+)
+```
+Finally, you can observe the users to verify the changes made with the following instruction.
+```bash
+db.getCollection('users').find({})
+```
+Once this is done, you have a user to access Trivia from its login.
+
 ### Create user on server with superuser privileges
 #### If you already have a username with superuser privileges you can skip these steps. 
 
