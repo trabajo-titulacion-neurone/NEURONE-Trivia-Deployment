@@ -76,30 +76,3 @@
     # - name: Display response
     #   debug:
     #     var: response
-
-
-
-
-
-
-
-
-# curl --location 'http://142.93.200.53:3030/api/auth/register' \
-# --header 'Content-Type: application/json' \
-# --data-raw '{
-#     "names": "Admin",
-#     "last_names": "Ejemplo",
-#     "email": "admin@admin.com",
-#     "password": "clave321.",
-#     "repeat_password": "clave321."
-# }'
-
-
-#"https://{{ hostvars[inventory_hostname]['ansible_host'] }}/api/auth/register"
-
-# db.getCollection('users').find({})
-
-# db.getCollection('users').updateOne(
-#    { email: 'admin@admin.com' }, // Filtro para seleccionar el documento
-#    { $set: { confirmed: true } } // Actualización del valor del atributo
-# )
