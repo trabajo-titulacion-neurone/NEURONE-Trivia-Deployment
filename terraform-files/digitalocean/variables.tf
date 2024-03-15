@@ -7,7 +7,7 @@ variable "token_digitalocean" {
 variable "fingerprint_ssh_key_digitalocean" {
   description = "Fingerprint of the saved SSH key associated with your DigitalOcean account"
   type    = string
-  default = "dd:ca:b2:21:ed:6e:47:dd:12:22:58:c2:58:5d:77:e6"
+  default = "ea:bc:26:fe:8e:8b:c3:c0:50:41:f1:be:af:13:ae:a6"
 }
 
 # variable "ssh_key_name_digitalocean" {

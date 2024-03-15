@@ -6,6 +6,7 @@
   ########################## Node installation with NVM #####################################################################################
 
 - name: Install NVM (Node Version Manager) #Source: https://gist.github.com/komuw/b3b5d24977d4df7bd549
+  # become: true
 
   # Using the 'shell' module to run shell commands and install NVM from the script.
   ansible.builtin.shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
