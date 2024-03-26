@@ -66,13 +66,20 @@ webservers:
 Run the playbook to deploy NEURONE Trivia on a development server using the following command with the "-K" flag to input the sudo (Become) password via terminal when prompted:
 
 ```bash
-ansible-playbook deploy-dev-server.yaml -i inventory.yaml -K
+$ ansible-playbook deploy-dev-server.yaml -i inventory.yaml -K
 ```
 The playbook will execute and configure the server according to the specifications provided in the configuration files.
 
 ## Deployment on a production server
 In this case, deployment takes place on a production server. Being of this type, an nginx server is set up to listen to HTTPS requests and obtain SSL certificates for the website. Therefore, it is necessary to have a registered and configured domain pointing to the production server for this purpose.
-Once this is done, it is necessary to modify the playbook to enter the domain data. In this case, the variables of the nginx role must be modified in this way.
+Once this is done, it is necessary to modify the playbook to enter the domain data. Fist, open the production playbook with a text editor.
+
+```bash
+$ sudo nano deploy-prod-server.yaml
+````
+
+
+In this case, the variables of the nginx role must be modified in this way.
 
 ```yaml
 
@@ -89,7 +96,7 @@ Where you should replace DOMAIN_NAME and EMAIL_DOMAIN with the domain you have a
 After this, it is necessary to modify the files located within the GAME-production role. Therefore, you should access this directory. First, open the config.js file with a text editor.
 
 ```bash
-nano roles/GAME-production/files/config.js
+$ nano roles/GAME-production/files/config.js
 ```
 Modify the file as follows.
 ```javascript
@@ -133,7 +140,7 @@ Where you should replace the value of DOMAIN_NAME with the domain name you have 
 
 Next, open the environment.ts file with a text editor.
 ```bash
-nano roles/GAME-production/files/environment.ts
+$ sudo nano roles/GAME-production/files/environment.ts
 ```
 
 Modify the file as follows.
@@ -165,7 +172,7 @@ Where you should replace the value of DOMAIN_NAME with the registered domain nam
 
 Next, open the environment.prod.ts file with a text editor.
 ```bash
-nano roles/GAME-production/files/environment.prod.ts
+$ sudo nano roles/GAME-production/files/environment.prod.ts
 ```
 ```javascript
 export const environment = {
@@ -181,7 +188,7 @@ Where you should replace the value of DOMAIN_NAME with the registered domain nam
 
 After this, it is necessary to edit the nginx configuration file to successfully deploy in production. To do this, navigate to the directory where this file is stored within the nginx role and open it with a text editor.
 ```bash
-nano roles/nginx/templates/game_https.conf
+$ sudo nano roles/nginx/templates/game_https.conf
 ```
 
 And modify the file as follows.
@@ -280,7 +287,7 @@ Where you should replace the value of DOMAIN_NAME with the registered domain nam
 Finally, run the playbook to deploy NEURONE Trivia on a production server using the following command with the "-K" flag to input the sudo (Become) password via terminal when prompted:
 
 ```bash
-ansible-playbook deploy-prod-server.yaml -i inventory.yaml -K
+$ ansible-playbook deploy-prod-server.yaml -i inventory.yaml -K
 ```
 
 
@@ -298,7 +305,7 @@ To access Trivia, you need to have a registered user in the database. If you don
 First, [Install Postman](https://learning.postman.com/docs/getting-started/installation/installation-and-updates/).
 
 ```bash
-sudo snap install postman
+$ sudo snap install postman
 ```
 and open it to send an HTTP request.
 #### If you have deployed Trivia in your local environment, you should copy the following URL and paste it into Postman.
@@ -346,7 +353,7 @@ Where you should replace the value of DOMAIN_NAME with the registered domain nam
 This will register the admin user in the database. However, this user is not confirmed yet, so it is not possible to access Trivia. To do this, it is necessary to update the newly created user to have its "confirmed" attribute set to true. To achieve this, access the MongoDB service with the necessary permissions.
 
 ```bash
-mongosh
+$ mongosh
 ```
 Next, access the Trivia database.
 
@@ -379,7 +386,7 @@ adduser <NEW_USERNAME>
 
 Next, enable superuser permissions with sudo using the following command.
 ```bash
-usermod -aG sudo <NEW_USERNAME>
+$ usermod -aG sudo <NEW_USERNAME>
 ```
 
 
@@ -387,7 +394,7 @@ usermod -aG sudo <NEW_USERNAME>
 #### If you already have password enabled to connect to the desired server, you can skip these steps.
 Open the SSH configuration file with a text editor.
 ```bash
-nano /etc/ssh/sshd_config
+$ nano /etc/ssh/sshd_config
 ```
 
 Make sure the following lines are in the file, then save it and close it:
@@ -400,19 +407,19 @@ KbdInteractiveAuthentication yes
 ```
 Next, restart ssh service.
 ```bash
-systemctl restart ssh
+$ systemctl restart ssh
 ```
 
 ### Add local SSH Key to authorized keys on server
 #### If your local machine's SSH key is already authorized by the server, you can skip these steps.  
 If you don't have an SSH key pair, you can create one with the following command:
 ```bash
-ssh keygen
+$ ssh keygen
 ```
 Next, add your SSH key to the list of keys authorized by the server using ssh-copy-id, along with your username.
 
 ```bash
-ssh-copy-id <SERVER_USERNAME>@<SERVER_IP_ADDRESS>
+$ ssh-copy-id <SERVER_USERNAME>@<SERVER_IP_ADDRESS>
 ```
 Then, enter the password associated with the user when prompted.
 
