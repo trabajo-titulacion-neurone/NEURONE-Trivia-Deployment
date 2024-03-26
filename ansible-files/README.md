@@ -17,7 +17,7 @@ This directory contains 3 playbooks to deploy the NEURONE Trivia system dependin
      
    - **Deployment on a development server:**
         - In this case, deployment occurs on a remote server with a user authorized to perform actions in superuser mode on the server. As it is a development server, an                nginx server is set up to only listen to HTTP requests.
-   - **Deployment on a development server:**
+   - **Deployment on a production server:**
         - Here, the deployment occurs on a remote server with a user authorized to execute superuser actions. As it's a production server, an nginx server is set up to       handle HTTPS requests and obtain SSL certificates for the website. Hence, a registered and configured domain pointing to the production server is necessary for this setup.
 
 
