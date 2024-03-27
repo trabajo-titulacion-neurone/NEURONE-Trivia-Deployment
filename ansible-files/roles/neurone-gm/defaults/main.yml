@@ -1,6 +1,7 @@
 ---
 # defaults file for neurone-gm
 neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git"
+#neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
 
 
 #Path where the neurone-gm repository will be stored both on the server and on the local machine where the playbook runs in case if is necessary to clone it.
@@ -15,9 +16,16 @@ neuronegm_server_pm2_process_name: "Neuronegm-Server"
 
 #neurone-gm configuration file will be replaced by the one located inside the role's files directory
 
+#The neurone-gm app.js file will be replaced by the one found inside the role's "files" directory
+neuronegm_server_app_file_localhost: "{{ role_path }}/files/app.js"
+
+#Path of the file that will be replaced by the file which is in the role's directory
+neuronegm_server_app_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/app.js"
+
 #The neurone-gm configuration file will be replaced by the one found inside the role's "files" directory
 neuronegm_server_config_file_localhost: "{{ role_path }}/files/config.js"
 
 #Path of the file that will be replaced by the file which is in the role's directory
 neuronegm_server_config_file_remote_server: "{{ ansible_env.HOME }}/apps/NEURONE-GM/Server/config/config.js"
+
 

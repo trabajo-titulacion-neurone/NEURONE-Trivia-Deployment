@@ -24,6 +24,11 @@
     src: "{{ neuronegm_server_config_file_localhost }}"
     dest: "{{ neuronegm_server_config_file_remote_server }}"
 
+- name: Synchronize app.js of neurone-gm from localhost where playbook runs
+  ansible.posix.synchronize:
+    src: "{{ neuronegm_server_app_file_localhost }}"
+    dest: "{{ neuronegm_server_app_file_remote_server }}"
+
 #Saved processes are restored in case of a server reboot
 - name: pm2 resurrect
   ansible.builtin.command: pm2 resurrect

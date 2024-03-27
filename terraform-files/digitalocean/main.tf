@@ -23,6 +23,7 @@ resource "digitalocean_droplet" "my_droplet" {
   name   = var.droplet_name
   region = var.droplet_region
   size   = var.droplet_size
+  # size = "c-2"
   # ssh_keys = [digitalocean_ssh_key.local_public_key.fingerprint]
   ssh_keys = [var.fingerprint_ssh_key_digitalocean]
 

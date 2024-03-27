@@ -34,10 +34,7 @@
       }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
-    - {role: neurone-gm, 
-        neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
-        # neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git",
-      }
+    - {role: neurone-gm}
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME-production, 
