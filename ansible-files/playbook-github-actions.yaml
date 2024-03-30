@@ -32,15 +32,10 @@
       }  
 
     # Installation of the neurone-gm (Server) module or API using pm2
-    - {role: neurone-gm, 
-        neuronegm_repository: "https://github.com/gerardoluceroc/NEURONE-GM.git", 
-        # neuronegm_repository: "https://github.com/NEURONE-IL/NEURONE-GM.git",
-      }
+    - {role: neurone-gm}
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME-production, 
-        # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
-        trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
         build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }

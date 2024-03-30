@@ -37,8 +37,6 @@
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME-localhost, 
-        # trivia_repository: "https://github.com/NEURONE-IL/GAME.git",
-        trivia_repository: "https://github.com/trabajo-titulacion-neurone/neurone-trivia.git",
         build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required)
       }
 

@@ -16,6 +16,7 @@
   ansible.builtin.git:
     repo: "{{ trivia_repository }}"
     dest: "{{ local_home }}{{ trivia_directory }}"
+    version: "{{ trivia_repository_version }}"
     clone: yes
     update: yes
     force: yes
