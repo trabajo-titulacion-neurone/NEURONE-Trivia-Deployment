@@ -44,6 +44,7 @@
   ansible.builtin.git:
     repo: "{{ trivia_repository }}"
     dest: "{{ ansible_env.HOME }}{{ trivia_directory }}"
+    version: "{{ trivia_repository_version }}"
     clone: yes
     update: yes
     force: yes #This is added due to an issue with modifying the package-lock.json in the local repository.

@@ -2,7 +2,7 @@
 # defaults file for GAME
 trivia_repository: "https://github.com/NEURONE-IL/GAME.git"
 
-trivia_repository_version: "4f76921737977db29a1fccdf468e7a0c5000f58a"
+trivia_repository_version: "66ccc5147fe2bf5f6764db5c7df1d3d1c20a45bd"
 
 #Path where the Trivia repository will be stored on the server and the local machine where playbook runs if is necessary
 trivia_directory: "/apps/GAME"
