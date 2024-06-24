@@ -1,3 +1,5 @@
+#RUN: ansible-playbook trivia-deploy-prod-server.yaml -i inventory.yaml -K
+
 - hosts: webservers
   serial: 1 # Number of hosts simultaneously executing the playbook
 
@@ -27,7 +29,7 @@
 
     # Installation of NEURONE-Core
     - {role: NEURONE-Core, 
-        build_neurone_core_on_server: false,
+        build_neurone_core_on_server: true,
         build_and_send_images_from_localhost: false
       }  
 
@@ -36,7 +38,7 @@
 
     # Installation of Trivia Server using pm2 and Trivia Client using Angular
     - {role: GAME-production, 
-        build_trivia_frontend_on_server: false, #true if you want to build on remote server (2GB of ram required)
+        build_trivia_frontend_on_server: true, #true if you want to build on remote server (2GB of ram required)
         build_and_send_trivia_frontend_from_localhost: false, #true if you want to build on localhost where playbook runs and send to server
       }
 
@@ -44,10 +46,14 @@
     - {role: nginx,
         http_connection: false,
         https_connection: true,
+        domain_name: "neurone-trivia.lat",
+        email: "gerardoluceroc@gmail.com"
     }
 
     # Firewall
     - {role: firewall-with-ufw, allowed_ports: [3005, 3007] }
 
+    # nginx
+    - {role: nginx, trainer_https_connection: false, trainer_http_connection: false}
+
   tasks:
-    

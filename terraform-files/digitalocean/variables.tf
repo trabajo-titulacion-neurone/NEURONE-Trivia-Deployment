@@ -31,7 +31,7 @@ variable "droplet_image" {
 variable "droplet_name" {
   description = "Name of the droplet to be created."
   type    = string
-  default = "trivia-neurone-server"
+  default = "neurone-trivia-server"
 }
 
 variable "droplet_region" {

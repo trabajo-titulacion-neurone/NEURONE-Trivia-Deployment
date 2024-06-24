@@ -7,16 +7,15 @@
     name: nginx
     state: latest
 
-########## HTTP CONNECTION ####################################################################
-- name: Copy Nginx HTTP configuration file
+########## Trivia HTTP CONNECTION ####################################################################
+- name: Copy Trivia Nginx HTTP configuration file
   become: true
   ansible.builtin.copy:
-    src: "{{ http_config_file }}"
+    src: "{{ trivia_http_config_file }}"
     dest: /etc/nginx/sites-available/game_http.conf
     owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"     
-    # mode: 0644
-  when: not https_connection and http_connection
+    group: "sudo"     
+  when: not trivia_https_connection and trivia_http_connection
   notify:
     - Reload Nginx
 
@@ -27,14 +26,15 @@
   loop: 
     - default
     - game_https.conf
-  when: not https_connection and http_connection
+    - trainer_https.conf
+  when: not trivia_https_connection and trivia_http_connection
   notify:
   - Reload Nginx
 
-- name: Activate HTTP Game config
+- name: Activate HTTP Trivia config
   become: true
   ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_http.conf /etc/nginx/sites-enabled/
-  when: not https_connection and http_connection
+  when: not trivia_https_connection and trivia_http_connection
   notify:
   - Reload Nginx
 
@@ -42,13 +42,58 @@
 
 
 
-############# HTTPS CONNECTION ##################################################################
+########## Trainer HTTP CONNECTION ####################################################################
+- name: Copy Trainer Nginx HTTP configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ trainer_http_config_file }}"
+    dest: /etc/nginx/sites-available/trainer_http.conf
+    owner: "{{ ansible_user }}"
+    group: "sudo"     
+  when: not trainer_https_connection and trainer_http_connection
+  notify:
+    - Reload Nginx
+
+- name: Desactivate another configurations
+  become: true
+  ignore_errors: true
+  ansible.builtin.shell: rm /etc/nginx/sites-enabled/{{ item }}
+  loop: 
+    - default
+    - game_https.conf
+    - trainer_https.conf
+  when: not trainer_https_connection and trainer_http_connection
+  notify:
+  - Reload Nginx
+
+
+- name: Activate HTTP Trainer config
+  become: true
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/trainer_http.conf /etc/nginx/sites-enabled/
+  when: not trainer_https_connection and trainer_http_connection
+  notify:
+  - Reload Nginx
+
+#################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+############# Trivia HTTPS CONNECTION ##################################################################
 - name: Install core snap
   become: true
   community.general.snap:
     name: core
     state: present
-  when: https_connection and domain_name is defined and email is defined
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
 
 - name: Install certbot snap
   become: true
@@ -56,28 +101,35 @@
     name: certbot
     classic: true
     state: present
-  when: https_connection and domain_name is defined and email is defined
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
 
 - name:  Link the certbot command from the snap install directory 
   become: true
   ansible.builtin.shell: ln -sf /snap/bin/certbot /usr/bin/certbot
-  when: https_connection and domain_name is defined and email is defined
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
 
-- name: Copy Nginx HTTPS configuration file
+- name: Copy Nginx Trivia HTTPS configuration file
   become: true
   ansible.builtin.copy:
-    src: "{{ https_config_file }}"
+    src: "{{ trivia_https_config_file }}"
     dest: /etc/nginx/sites-available/game_https.conf
     owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"     
-  when: https_connection and domain_name is defined and email is defined
+    group: "sudo"     
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
   notify:
     - Reload Nginx
 
-- name: Get SSL/TLS certificate with Certbot
+- name: Get SSL/TLS certificate with Certbot for domain of Trivia
+  ignore_errors: true
   become: true
-  ansible.builtin.shell: certbot --nginx -d {{ domain_name }} -d www.{{ domain_name }} --agree-tos --non-interactive --email {{ email }}
-  when: https_connection and domain_name is defined and email is defined
+  ansible.builtin.shell: certbot --nginx -d {{ trivia_domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
+
+- name: Get SSL/TLS certificate with Certbot for www sub domain of Trivia
+  ignore_errors: true
+  become: true
+  ansible.builtin.shell: certbot --nginx -d www.{{ trivia_domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
   
 - name: Desactivate another configurations
   become: true
@@ -86,18 +138,116 @@
   loop: 
     - default
     - game_http.conf
-  when: https_connection and domain_name is defined and email is defined
-  notify:
-  - Reload Nginx
-
-- name: Activate HTTPS Game config
-  become: true
-  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_https.conf /etc/nginx/sites-enabled/
-  when: https_connection and domain_name is defined and email is defined
+    - trainer_http.conf
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
   notify:
   - Reload Nginx
 
 ##################################################################################################
+
+
+
+
+
+
+
+
+
+
+############# Trainer HTTPS CONNECTION ##################################################################
+- name: Install core snap
+  become: true
+  community.general.snap:
+    name: core
+    state: present
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+
+- name: Install certbot snap
+  become: true
+  community.general.snap:
+    name: certbot
+    classic: true
+    state: present
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+
+- name:  Link the certbot command from the snap install directory 
+  become: true
+  ansible.builtin.shell: ln -sf /snap/bin/certbot /usr/bin/certbot
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+
+- name: Copy Nginx Trainer HTTPS configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ trainer_https_config_file }}"
+    dest: /etc/nginx/sites-available/trainer_https.conf
+    owner: "{{ ansible_user }}"
+    group: "sudo"     
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+  notify:
+    - Reload Nginx
+
+- name: Get SSL/TLS certificate with Certbot for domain of Trainer
+  ignore_errors: true
+  become: true
+  ansible.builtin.shell: certbot --nginx -d {{ trainer_domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+
+- name: Get SSL/TLS certificate with Certbot for www sub domain of Trainer
+  ignore_errors: true
+  become: true
+  ansible.builtin.shell: certbot --nginx -d www.{{ trainer_domain_name }} --agree-tos --non-interactive --email {{ email }}
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+  
+- name: Desactivate another configurations
+  become: true
+  ignore_errors: true
+  ansible.builtin.shell: rm /etc/nginx/sites-enabled/{{ item }}
+  loop: 
+    - default
+    - game_http.conf
+    - trainer_http.conf
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+  notify:
+  - Reload Nginx
+
+##################################################################################################
+
+- name: Copy Nginx Trivia HTTPS configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ trivia_https_config_file }}"
+    dest: /etc/nginx/sites-available/game_https.conf
+    owner: "{{ ansible_user }}"
+    group: "sudo"     
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
+  notify:
+    - Reload Nginx
+
+- name: Copy Nginx Trainer HTTPS configuration file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ trainer_https_config_file }}"
+    dest: /etc/nginx/sites-available/trainer_https.conf
+    owner: "{{ ansible_user }}"
+    group: "sudo"     
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+  notify:
+    - Reload Nginx
+
+- name: Activate HTTPS Trivia config
+  become: true
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/game_https.conf /etc/nginx/sites-enabled/
+  when: trivia_https_connection and trivia_domain_name is defined and email is defined
+  notify:
+  - Reload Nginx
+
+- name: Activate HTTPS Trainer config
+  become: true
+  ansible.builtin.shell: ln -sf /etc/nginx/sites-available/trainer_https.conf /etc/nginx/sites-enabled/
+  when: trainer_https_connection and trainer_domain_name is defined and email is defined
+  notify:
+  - Reload Nginx
+
 
 - name: start nginx
   ignore_errors: true

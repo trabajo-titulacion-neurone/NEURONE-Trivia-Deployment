@@ -1,0 +1,32 @@
+---
+# defaults file for TRAINER-prod
+
+trainer_repository: "https://github.com/NEURONE-IL/TRAINER.git"
+
+trainer_repository_version: ""
+
+#Path where the Trainer repository will be stored on the server and the local machine where playbook runs if is necessary
+trainer_directory: "/apps/TRAINER"
+
+#Path where the Trainer Server folder will be stored
+trainer_server_directory: "/apps/TRAINER/Server"
+
+#Path where the Trainer Client folder will be stored
+trainer_client_directory: "/apps/TRAINER/Client"
+
+#Name of the pm2 process running Trainer server will have.
+trainer_server_pm2_process_name: "Trainer-Server"
+
+
+#Conditional to build the frontend on the destination server or on the machine where the playbook runs in case of a local execution
+build_trainer_frontend_on_server: true
+
+#Trainer configurations files will be replaced by the ones located inside the role's files directory
+
+#Paths of the files that will be replaced by the file which is in the role
+trainer_server_config_file_localhost: "{{ role_path }}/files/.env"
+trainer_client_environment_prod_file_localhost: "{{ role_path }}/files/environment.prod.ts"
+
+#Path of the file that will be replaced by the file which is in the role's directory
+trainer_server_config_file_remote_server: "/apps/TRAINER/Server/.env.example"
+trainer_client_environment_prod_file_remote_server: "/apps/TRAINER/Client/src/environments/environment.prod.ts.example"

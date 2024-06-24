@@ -166,7 +166,7 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
   loop:
-    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "{{ ansible_user }}" }
+    - { path: "{{ ansible_env.HOME }}/neuroneAssets", owner: "{{ ansible_user }}", group: "sudo" }
     - { path: "{{ ansible_env.HOME }}/neuroneDatabase", owner: "root", group: "root" }
     - { path: "{{ ansible_env.HOME }}/neuroneIndex", owner: "8983", group: "8983" }
   
